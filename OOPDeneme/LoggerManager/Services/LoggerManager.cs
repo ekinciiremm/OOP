@@ -51,7 +51,7 @@ namespace OOPDeneme.LoggerManager.Services
 
         public void LogDebug(string message) {
 
-            Log.Debug(message);//geliştirme ve hata ayıklama sürecinde kullanılan mesajlar için kullanılır.
+            Log.Debug(message);//geliştirme ve hata ayıklama sürecinde kullanılan mesajlar için kullanılır
         }
 
     }
