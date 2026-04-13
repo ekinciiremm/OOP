@@ -27,7 +27,7 @@ namespace OOPDeneme.LoggerManager.Services
                     TableName = "Logs",
                     AutoCreateSqlTable = true
                 })
-                //appsettings.json dosyasından yapılandırma okunur
+               
                 .CreateLogger();//loglama işlemi için bir logger nesnesi oluşturulur
 
 
