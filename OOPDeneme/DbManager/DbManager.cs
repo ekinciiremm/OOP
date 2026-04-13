@@ -22,7 +22,7 @@ namespace OOPDeneme.DbManager
         }
 
 
-        public void ExecuteCommand(string query, List<SqlParameter> parameters)//NSERT, UPDATE, DELETE gibi ExecuteNonQuery ile çalışan komutları çalıştırmak için
+        public void ExecuteCommand(string query, List<SqlParameter> parameters)//insert, update, delete gibi ExecuteNonQuery ile çalışan komutları çalıştırmak için
         {
             using (SqlConnection connection = new SqlConnection(baglantiCumlesi))
             {

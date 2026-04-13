@@ -1,4 +1,5 @@
-﻿using OOPDeneme.LoggerManager.Interfaces;
+﻿using Microsoft.Extensions.Configuration;
+using OOPDeneme.LoggerManager.Interfaces;
 using Serilog;//kütüphane
 
 
@@ -8,11 +9,22 @@ namespace OOPDeneme.LoggerManager.Services
     {
        
         public LoggerManager()//private constructor ile dışarıdan yeni bir instance oluşturulması engelleniyor
-        {
+{
+
+            var configuration = new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json")
+        .Build();
+
+
             Log.Logger = new LoggerConfiguration()//logger yapılandırması
                 .MinimumLevel.Debug()//minimum log seviyesi debug olarak ayarlanır, bu sayede tüm log seviyeleri kaydedilir
                 .WriteTo.Console()//loglar konsola yazdırılır
+                .ReadFrom.Configuration(configuration) //appsettings.json dosyasından yapılandırma okunur
                 .CreateLogger();//loglama işlemi için bir logger nesnesi oluşturulur
+
+
+
 
             Log.Information("Logger sistemi başlatıldı.");
         }

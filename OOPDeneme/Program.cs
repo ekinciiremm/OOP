@@ -53,11 +53,12 @@ namespace OOPDeneme
                     logger.LogError("Hata oluştu: " + ex.Message);
                     Console.WriteLine("Hata: " + ex.Message);
                 }
-                Log.CloseAndFlush();//Serilog'un loglama işlemi tamamlandıktan sonra kaynakları serbest bırakması için kullanılan bir yöntemdir.
-                Console.WriteLine("Program sonlandırıldı.");
             }
 
+            Console.WriteLine("Program sonlandırıldı.");
+            Log.CloseAndFlush();
 
+        }
             //kitap ekle
             static void KitapEkle()
             {
@@ -132,8 +133,7 @@ namespace OOPDeneme
                     new SqlParameter("@kAdi", "%" + ad + "%")
                 };
 
-                    using (SqlDataReader reader = servis.ExecuteReader(sorgu, parametre))//veritabanından veri okuma işlemi için kullanılan SqlDataReader nesnesini oluşturuyor. 
-                                                                                         //using bloğu, reader nesnesinin iş bittiğinde otomatik olarak kapatılmasını sağlar.
+                    using (SqlDataReader reader = servis.ExecuteReader(sorgu, parametre))
                     {
                         bool bulundu = false;
                         while (reader.Read())
@@ -192,7 +192,7 @@ namespace OOPDeneme
                 {
                     string sorgu = "select * from Kitaplar";
 
-                    using (SqlDataReader reader = servis.ExecuteReader(sorgu, null)) //veritabanından veri okuma işlemi için kullanılan SqlDataReader nesnesini oluşturuyor.
+                    using (SqlDataReader reader = servis.ExecuteReader(sorgu, null)) 
                     {
                         Console.WriteLine("Listelenecek Kİtaplar");
                         bool kitapVar = false;
@@ -214,6 +214,6 @@ namespace OOPDeneme
                     Console.WriteLine("Hata:" + ex.Message);
                 }
             }
-        }
+        
     }
 }
