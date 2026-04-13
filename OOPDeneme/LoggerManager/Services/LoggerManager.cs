@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using OOPDeneme.LoggerManager.Interfaces;
-using Serilog;//kütüphane
+using Serilog;
+using Serilog.Sinks.MSSqlServer;//kütüphane
 
 
 namespace OOPDeneme.LoggerManager.Services
@@ -10,17 +11,23 @@ namespace OOPDeneme.LoggerManager.Services
        
         public LoggerManager()//private constructor ile dışarıdan yeni bir instance oluşturulması engelleniyor
 {
-
             var configuration = new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
         .AddJsonFile("appsettings.json")
         .Build();
 
+         string connString = configuration.GetConnectionString("DefaultConnection");
 
             Log.Logger = new LoggerConfiguration()//logger yapılandırması
                 .MinimumLevel.Debug()//minimum log seviyesi debug olarak ayarlanır, bu sayede tüm log seviyeleri kaydedilir
                 .WriteTo.Console()//loglar konsola yazdırılır
-                .ReadFrom.Configuration(configuration) //appsettings.json dosyasından yapılandırma okunur
+                .WriteTo.File("logs/log-.txt") 
+                .WriteTo.MSSqlServer(connectionString: connString, sinkOptions: new MSSqlServerSinkOptions
+                {
+                    TableName = "Logs",
+                    AutoCreateSqlTable = true
+                })
+                //appsettings.json dosyasından yapılandırma okunur
                 .CreateLogger();//loglama işlemi için bir logger nesnesi oluşturulur
 
 

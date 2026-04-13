@@ -68,13 +68,16 @@ namespace OOPDeneme
                     string ad = Console.ReadLine();
                     Console.WriteLine("Stok Sayısı: ");
                     int stok = int.Parse(Console.ReadLine());
+                     Console.WriteLine("ISBN: ");
+                     string isbn = Console.ReadLine();
 
-                    string sorgu = "insert into Kitaplar (Kitap_adi, Stok_adedi) values (@kAdi, @sAdedi)";
+                string sorgu = "insert into Kitaplar (Kitap_adi, Stok_adedi,ISBN, Yayin_evi_id, Tur_id, Yazar_id) values (@kAdi, @sAdedi, @isbn,1,1,1)";
 
                     var parametre = new List<SqlParameter>//kitap ekleme işlemi için gerekli parametreler oluşturuluyor
                 {
                     new SqlParameter("@kAdi", ad),
-                    new SqlParameter("@sAdedi", stok)
+                    new SqlParameter("@sAdedi", stok),
+                    new SqlParameter("@isbn", isbn)
                 };
 
                     servis.ExecuteCommand(sorgu, parametre);//kitap ekleme işlemi gerçekleştiriliyor
@@ -83,7 +86,7 @@ namespace OOPDeneme
                 }
                 catch (FormatException)
                 {
-                    logger.LogWarning("Stok sayısı için geçersiz format.");
+                    logger.LogWarning("Kitap ekeleme sırasında hata: ");
                     Console.WriteLine("Hata: Stok sayısı için sayı giriniz.");
                 }
                 catch (Exception ex)
