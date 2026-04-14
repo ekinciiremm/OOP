@@ -28,6 +28,8 @@ namespace OOPDeneme
                     Console.WriteLine("3- Kitap Ara");
                     Console.WriteLine("4- Kitap Güncelle");
                     Console.WriteLine("5- Kitap Listele");
+                    Console.WriteLine("6- İstatistik");
+                    Console.WriteLine("7- Stok Kontrol");
                     Console.WriteLine("0- Çıkış");
                     Console.Write("Seçiminiz: ");
 
@@ -41,6 +43,8 @@ namespace OOPDeneme
                         case "3": KitapAra(); break;
                         case "4": KitapGuncelle(); break;
                         case "5": KitapListele(); break;
+                        case "6": GenelIstatistikler(); break;
+                        case "7": StokKontrol(); break;
                         case "0": secimYap = false; break;
 
                         default:
@@ -217,6 +221,62 @@ namespace OOPDeneme
                     Console.WriteLine("Hata:" + ex.Message);
                 }
             }
-        
+
+        static void GenelIstatistikler()
+        {
+            try
+            {
+                string sorgu = "select count(*), sum(Stok_adedi) from Kitaplar ";
+
+                using (SqlDataReader reader= servis.ExecuteReader(sorgu, null))
+
+                {
+                    if (reader.Read())
+                    {
+                        int KitapSayisi = reader.GetInt32(0);
+                        int ToplamStok = reader.GetInt32(1);
+
+
+                        Console.WriteLine($"Sistemdeki Kitap Sayısı:{KitapSayisi} ");
+                        Console.WriteLine($"Sistemdeki Kitapların Toplam Stok Adedi: {ToplamStok}");
+
+                        logger.LogInfo($"İstatistik raporu çekildi. Kitap: {KitapSayisi}, Stok: {ToplamStok}");
+                    }
+                    
+                }
+            }
+            catch (Exception ex) {
+
+                logger.LogError("İstatistik çekilirken hata"+ ex.Message);
+                Console.WriteLine("Hata: Bilgiler hesaplanamadı.");
+            }
+        }
+
+
+        static void StokKontrol() {
+            try
+            {
+                string sorgu = "select Kitap_adi, Stok_adedi from Kitaplar where Stok_adedi<20";
+
+                using (SqlDataReader reader = servis.ExecuteReader(sorgu, null))
+                {
+                    if (reader.Read())
+                    {
+                        Console.WriteLine($"Düşük stoklu kitap: {reader["Kitap_adi"]} (Stok: {reader["Stok_adedi"]})");
+                        logger.LogWarning($"Düşük stok uyarısı: {reader["Kitap_adi"]} (Stok: {reader["Stok_adedi"]})");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Tüm kitapların stok adedi yeterli.");
+                    }
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("Stok kontrolü sırasında hata: " + ex.Message);
+                Console.WriteLine("Hata: Stok kontrolü yapılamadı.");
+            }     
+        }
     }
 }
