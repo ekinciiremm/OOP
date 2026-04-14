@@ -51,6 +51,9 @@ namespace OOPDeneme
                             logger.LogWarning("Geçersiz seçim yapıldı: " + secim);
                             Console.WriteLine("Geçersiz seçim!"); break;
                     }
+                }catch(SqlException ex) {
+                    logger.LogError("Veritabanı bağlantı hatası! SQL Server kapalı olabilir: " + ex.Message);
+                    Console.WriteLine("Sistem şu an veritabanına ulaşamıyor.");
                 }
                 catch (Exception ex)
                 {
@@ -222,7 +225,7 @@ namespace OOPDeneme
                 }
             }
 
-        static void GenelIstatistikler()
+        static void GenelIstatistikler()//sistemdeki kitap sayısı ve toplam stok adedini hesaplar
         {
             try
             {
@@ -253,7 +256,7 @@ namespace OOPDeneme
         }
 
 
-        static void StokKontrol() {
+        static void StokKontrol() {//stok adedi 20'nin altında olan kitapları kontrol eder
             try
             {
                 string sorgu = "select Kitap_adi, Stok_adedi from Kitaplar where Stok_adedi<20";
