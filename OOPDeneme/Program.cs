@@ -1,17 +1,37 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using OOPDeneme.DbManager;
-using OOPDeneme.LoggerManager.Interfaces;
+using OOPDeneme.LoggerManager;
 using Serilog;
 
 namespace OOPDeneme
 {
+    
     class Program
     {
-        static IDbServis servis = new DbManager.DbManager();
-        static ILoggerServices logger = new OOPDeneme.LoggerManager.Services.LoggerManager();
+        static ILoggerServices logger;
+        static IDbServis servis;
 
         static void Main(string[] args)
         {
+
+
+
+            //Serilog yapılandırması
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+
+            string baglanti = configuration.GetConnectionString("DefaultConnection");//appsettings.json dosyasından veritabanı bağlantı cümlesi okunuyor
+
+            
+            logger = new OOPDeneme.LoggerManager.Services.LoggerManager(baglanti);//logger sınıfı oluşturuluyor ve bağlantı cümlesi parametre olarak veriliyor
+
+            
+            servis = new OOPDeneme.DbManager.DbManager(baglanti);//veritabanı servis sınıfı oluşturuluyor 
+
+
             logger.LogInfo("Program başladı.");
 
 

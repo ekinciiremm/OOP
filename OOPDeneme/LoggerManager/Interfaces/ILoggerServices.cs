@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OOPDeneme.LoggerManager.Interfaces
+namespace OOPDeneme.LoggerManager
 {
     public interface ILoggerServices
     {

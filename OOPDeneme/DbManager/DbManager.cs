@@ -3,28 +3,26 @@ using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using OOPDeneme.LoggerManager;
 
 namespace OOPDeneme.DbManager
 {
-    internal class DbManager : IDbServis
+    public class DbManager : IDbServis
     {
-        private readonly string baglantiCumlesi =string.Empty;
-        public DbManager()
+        private readonly string _baglantiCumlesi;
+       
+
+        public DbManager(string baglantiCumlesi)
         {
-            var yapilandir = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
-            IConfiguration config = yapilandir.Build();
-
-    
-            baglantiCumlesi = config.GetConnectionString("DefaultConnection");
+             _baglantiCumlesi = baglantiCumlesi;
+           
+            
         }
 
 
         public void ExecuteCommand(string query, List<SqlParameter> parameters)//insert, update, delete gibi ExecuteNonQuery ile çalışan komutları çalıştırmak için
         {
-            using (SqlConnection connection = new SqlConnection(baglantiCumlesi))
+            using (SqlConnection connection = new SqlConnection(_baglantiCumlesi))
             {
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(query, connection))
@@ -37,7 +35,7 @@ namespace OOPDeneme.DbManager
 
         public SqlDataReader ExecuteReader(string query, List<SqlParameter> parameters = null)
         {
-            SqlConnection connection = new SqlConnection(baglantiCumlesi);// yeni veritabanı bağlantısı
+            SqlConnection connection = new SqlConnection(_baglantiCumlesi);// yeni veritabanı bağlantısı
 
             try { 
             connection.Open();//bağlantı açıldı

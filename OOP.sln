@@ -5,6 +5,8 @@ VisualStudioVersion = 17.14.36930.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OOPDeneme", "OOPDeneme\OOPDeneme.csproj", "{158B9561-1D72-4BF3-95F2-3E442C78C980}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kutuphane.WebAPI", "Kutuphane.WebAPI\Kutuphane.WebAPI.csproj", "{68EAA491-DC53-47B1-96E2-66DC6D67CFFF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{158B9561-1D72-4BF3-95F2-3E442C78C980}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{158B9561-1D72-4BF3-95F2-3E442C78C980}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{158B9561-1D72-4BF3-95F2-3E442C78C980}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68EAA491-DC53-47B1-96E2-66DC6D67CFFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68EAA491-DC53-47B1-96E2-66DC6D67CFFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68EAA491-DC53-47B1-96E2-66DC6D67CFFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68EAA491-DC53-47B1-96E2-66DC6D67CFFF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
