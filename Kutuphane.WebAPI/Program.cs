@@ -49,27 +49,9 @@ app.UseAuthorization();
 app.MapControllers();
 
 
-// Program.cs içinde app.Run() satýrýnýn hemen üstüne ekle:
 
-/*using (var scope = app.Services.CreateScope())
-{
-    var testLogger = scope.ServiceProvider.GetRequiredService<ILoggerService>();
-    var testDb = scope.ServiceProvider.GetRequiredService<IDbService>();
 
-    try
-    {
-        testLogger.LogInfo("Uygulama baþlatma testi: Servisler baþarýyla ayaða kalktý.");
-        // Basit bir test sorgusu (Veritabaný baðlantýsýný denemek için)
-        testDb.ExecuteReader("SELECT 1");
-        testLogger.LogInfo("Veritabaný baðlantý testi baþarýlý!");
-        Console.WriteLine(">>> TEST BAÞARILI: Servisler ve DB baðlandý! <<<");
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($">>> TEST HATASI: {ex.Message} <<<");
-        testLogger.LogError($"Baþlatma testi baþarýsýz: {ex.Message}");
-    }
-}*/
+
 
 
 app.Run();
