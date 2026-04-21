@@ -1,3 +1,4 @@
+using Kutuphane.WebAPI.Repositories;
 using Kutuphane.WebAPI.Services;
 using Serilog;
 
@@ -23,18 +24,18 @@ Log.Logger = new LoggerConfiguration()
 builder.Services.AddSwaggerGen();
 builder.Host.UseSerilog();
 
-// Baðýmlýlýklarý kaydet
-builder.Services.AddSingleton<ILoggerService, LoggerManager>(sp => new LoggerManager(connectionString));
-// IDbService'yi DbManager ile kaydet
-builder.Services.AddScoped<IDbService, DbManager>(sp =>new DbManager(connectionString, sp.GetRequiredService<ILoggerService>()));
 
+builder.Services.AddSingleton<ILoggerService, LoggerManager>(sp => new LoggerManager(connectionString));
+builder.Services.AddScoped<IDbService, DbManager>(sp =>new DbManager(connectionString, sp.GetRequiredService<ILoggerService>()));
+builder.Services.AddScoped<IGenelBakisRepository, GenelBakisRepository>();
+builder.Services.AddScoped<IKitapDuzenleRepository, KitapDuzenleRepository>();
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
 
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
 
 
 

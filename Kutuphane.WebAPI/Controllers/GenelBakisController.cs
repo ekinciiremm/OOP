@@ -1,8 +1,7 @@
 ﻿using Kutuphane.WebAPI.DTOs;
-using Kutuphane.WebAPI.Services;
-using Microsoft.AspNetCore.Http;
+using Kutuphane.WebAPI.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
+
 
 namespace Kutuphane.WebAPI.Controllers
 {
@@ -11,71 +10,57 @@ namespace Kutuphane.WebAPI.Controllers
     public class GenelBakisController : ControllerBase
     {
 
-        private readonly IDbService _dbService;
-        private readonly ILoggerService _logger;
+      
+        private readonly IGenelBakisRepository _repo;
 
-
-        public GenelBakisController(IDbService dbService, ILoggerService logger)
+        public GenelBakisController(IGenelBakisRepository repo)
         {
-            _dbService = dbService;
-            _logger = logger;
+           
+            _repo = repo;
         }
 
         [HttpGet("istatistikler")]
-        public IActionResult Istatistikler()
+        public IActionResult GetIstatistikler()
         {
-
-            try
+            var genelBakis = new GenelBakisDTO
             {
-
-                var istatistikler = new GenelBakisDTO();
-
-                using (var reader = _dbService.ExecuteReader("select count(*) from Kitaplar"))
-                {
-
-                    if (reader.Read())
-                    {
-                        istatistikler.ToplamKitap = reader.GetInt32(0);
-                    }
-                }
-
-
-                using (var reader = _dbService.ExecuteReader("select count(*) from Uyeler"))
-                {
-                    if (reader.Read())
-                    {
-                        istatistikler.KayitliUye = reader.GetInt32(0);
-                    }
-                }
-
-                using (var reader = _dbService.ExecuteReader("select count(*) from dbo.KitapAlmaİslemleri where Islem_durumu = 'Aktif'"))
-                {
-                    if (reader.Read())
-                    {
-                        istatistikler.AktifOdunc = reader.GetInt32(0);
-                    }
-                }
-
-                using (var reader = _dbService.ExecuteReader("select count(*) from dbo.KitapAlmaİslemleri where Islem_durumu = 'Gecikmiş'"))
-                {
-                    if (reader.Read())
-                    {
-                        istatistikler.GecikenKitap = reader.GetInt32(0);
-                    }
-                }
-
-              
-
-                    return Ok(istatistikler);
-                
-            }
-            catch (SqlException ex)
-            {
-                _logger.LogError("Veritabanı Hatası: " + ex.Message);
-                return StatusCode(500, "Veritabanı hatası oluştu.");
-
-            }
-
+                ToplamKitap = _repo.ToplamKitap(),
+                KayitliUye = _repo.KayitliUye(),
+                AktifOdunc = _repo.AktifOdunc(),
+                GecikenKitap = _repo.GecikenKitap()
+            };
+            return Ok(genelBakis);
         }
+
+        [HttpGet("son-eklenenler")]
+        public IActionResult GetSonEklenenler()
+        {
+            var sonEklenenler = _repo.SonEklenenKitaplar();
+            return Ok(sonEklenenler);
+        }
+
+        [HttpGet("aktif-odunc")]
+        public IActionResult GetAktifOdunc()
+        {
+            var aktifOdunc = _repo.AktifOduncKitaplar();
+            return Ok(aktifOdunc);
+        }
+
+        [HttpGet("tur-dagilimi")]
+        public IActionResult GetTurDagilimi()
+        {
+            var turDagilimi = _repo.TurDagilimi();
+            return Ok(turDagilimi);
+        }
+
+        [HttpGet("tum-kitaplar")]
+        public IActionResult GetTumKitaplar()
+        {
+            var tumKitaplar = _repo.TumKitaplar();
+            return Ok(tumKitaplar);
+        }
+
+
+
     }
 }
