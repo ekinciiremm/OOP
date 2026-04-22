@@ -11,6 +11,6 @@ namespace Kutuphane.WebAPI.Repositories
         bool KitapSil(int id);
 
         string BenzersizIsbnUret();
-        bool IsbnVarMi(string isbn);
+        
     }
 }

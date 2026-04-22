@@ -43,19 +43,7 @@ namespace Kutuphane.WebAPI.Controllers
         }
 
 
-        [HttpGet("isbn-var-mi/{isbn}")]
-        public IActionResult IsbnVarMi(string isbn)
-        {
-            bool varMi = _repo.IsbnVarMi(isbn);
-            return Ok(new { varMi });
-        }
-
-        [HttpGet("isbn-olustur")]
-        public IActionResult IsbnOlustur()
-        {
-            var isbn = _repo.BenzersizIsbnUret();
-            return Ok(new { isbn });
-        }
+  
 
 
 

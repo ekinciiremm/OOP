@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Libra — Kütüphane Yönetimi</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style/style.css">
+
+<style>
+
+</style>
+</head>
+<body>
+
+<!-- ══════ LOGIN ══════ -->
+<div id="login-screen">
+  <div class="lcard">
+    <div class="lhdr">
+      <div class="llogo">📚</div>
+      <div class="ltitle">Libra</div>
+      <div class="lsub">KÜTÜPHANE YÖNETİM SİSTEMİ</div>
+    </div>
+    <div class="lbody">
+      <div class="lerr" id="lerr">⚠ Kullanıcı ID veya şifre hatalı. Lütfen tekrar deneyin.</div>
+      <div class="lfield">
+        <label class="llabel">Kullanıcı ID</label>
+        <input class="linp" id="l-uid" placeholder="Kullanıcı ID giriniz…" onkeydown="if(event.key==='Enter')document.getElementById('l-pass').focus()">
+      </div>
+      <div class="lfield">
+        <label class="llabel">Şifre</label>
+        <div style="position:relative">
+          <input class="linp" id="l-pass" type="password" placeholder="••••••••" style="padding-right:44px" onkeydown="if(event.key==='Enter')doLogin()">
+          <button onclick="toggleVis()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-3);font-size:16px;padding:0" id="l-eye">👁</button>
+        </div>
+      </div>
+      <button class="lbtn" onclick="doLogin()">Giriş Yap →</button>
+    </div>
+    <div class="lfooter">
+      <div class="lhint">Hesap seçerek hızlı giriş yapın:</div>
+      <div class="lquick" id="lquick"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ SIDEBAR ══════ -->
+<nav class="sidebar">
+  <div class="sb-logo">
+    <div class="sb-mark">📚</div>
+    <div><div class="sb-name">Libra</div><div class="sb-tag">Kütüphane</div></div>
+  </div>
+  <div class="nav">
+    <div class="nav-sec">Ana Menü</div>
+    <div class="nav-item active" onclick="go('dashboard',this)">
+      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Genel Bakış
+    </div>
+    <div class="nav-item" onclick="go('kitaplar',this)">
+      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>Kitaplık
+      <span class="nav-badge" id="nb-k">0</span>
+    </div>
+    <div class="nav-item" onclick="go('uyeler',this)">
+      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>Üyeler
+      <span class="nav-badge" id="nb-u">0</span>
+    </div>
+    <div class="nav-item" onclick="go('islemler',this)">
+      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M8 7h12M8 12h12M8 17h12M4 7h.01M4 12h.01M4 17h.01"/></svg>Ödünç İşlemleri
+      <span class="nav-badge red" id="nb-o" style="display:none">0</span>
+    </div>
+    <div class="nav-sec" style="margin-top:1.4rem">Araçlar</div>
+    <div class="nav-item" onclick="go('gecikme',this)">
+      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Gecikme Takibi
+      <span class="nav-badge red" id="nb-g" style="display:none">0</span>
+    </div>
+    <div class="nav-item" onclick="go('stok',this)">
+      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Stok Uyarıları
+      <span class="nav-badge red" id="nb-s" style="display:none">0</span>
+    </div>
+    <div class="nav-item" onclick="go('istatistik',this)">
+      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>İstatistikler
+    </div>
+    <div class="nav-item" onclick="go('loglar',this)">
+      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Sistem Logları
+    </div>
+  </div>
+  <div class="sb-bottom">
+    <div class="sb-user">
+      <div class="sb-avatar" id="sb-av">A</div>
+      <div><div class="sb-uname" id="sb-name">Admin</div><div class="sb-urole" id="sb-role">Kütüphaneci</div></div>
+      <div class="sb-dot"></div>
+    </div>
+    <div class="sb-logout" onclick="doLogout()">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Çıkış Yap
+    </div>
+  </div>
+</nav>
+
+<!-- ══════ TOPBAR ══════ -->
+<div class="topbar">
+  <div class="tb-title" id="ttitle">Genel Bakış</div>
+  <div class="spill" onclick="openCmd()">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input type="text" placeholder="Ara veya komut çalıştır…" id="srch" oninput="handleSearch(this.value)" onfocus="if(!this.value)openCmd()">
+    <kbd>⌘K</kbd>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <button class="idbtn" onclick="toggleNp()" title="Bildirimler">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      <span class="dot" id="ndot"></span>
+    </button>
+    <button class="btn btn-p btn-sm" id="tbbtn" onclick="openKitapModal()">
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Kitap Ekle
+    </button>
+  </div>
+</div>
+
+<!-- NOTIFICATION PANEL -->
+<div class="np" id="np">
+  <div class="np-hdr"><div class="np-title">🔔 Bildirimler</div><button class="btn btn-g btn-xs" onclick="markRead()">Okundu</button></div>
+  <div id="np-list" style="overflow-y:auto;flex:1"></div>
+</div>
+
+<!-- ══════ MAIN ══════ -->
+<main class="main"><div class="content">
+
+<!-- DASHBOARD -->
+<div class="page active" id="page-dashboard">
+  <div class="stats-row">
+    <div class="sc cg"><div class="sc-chip chip-g">📚 Koleksiyon</div><div class="sc-val" id="sv-k">—</div><div class="sc-label">Toplam Kitap</div><div class="spark" id="sp-k"></div></div>
+    <div class="sc cb"><div class="sc-chip chip-b">👥 Üye</div><div class="sc-val" id="sv-u">—</div><div class="sc-label">Kayıtlı Üye</div><div class="spark" id="sp-u"></div></div>
+    <div class="sc ca"><div class="sc-chip chip-a">📖 Ödünç</div><div class="sc-val" id="sv-o">—</div><div class="sc-label">Aktif Ödünç</div><div class="spark" id="sp-o"></div></div>
+    <div class="sc cr"><div class="sc-chip chip-r">⏰ Gecikme</div><div class="sc-val" id="sv-g">—</div><div class="sc-label">Geciken Kitap</div><div class="spark" id="sp-g"></div></div>
+  </div>
+  <div class="g2c mb15">
+    <div class="card"><div class="card-hdr"><div><div class="card-title">Aylık Aktivite</div><div class="card-sub">Son 7 ay</div></div></div><div class="card-body" id="dash-chart"></div></div>
+    <div class="card"><div class="card-hdr"><div class="card-title">Tür Dağılımı</div></div><div class="card-body" id="dash-tur"></div></div>
+  </div>
+  <div class="g2c">
+    <div class="card"><div class="card-hdr"><div class="card-title">Son Eklenen Kitaplar</div><button class="btn btn-g btn-sm" onclick="go('kitaplar',document.querySelectorAll('.nav-item')[1])">Tümü →</button></div><div class="tw"><table><thead><tr><th>Kitap</th><th>Stok</th><th>Durum</th></tr></thead><tbody id="dash-books"></tbody></table></div></div>
+    <div class="card"><div class="card-hdr"><div class="card-title">Aktif Ödünç</div><button class="btn btn-p btn-sm" onclick="openOduncModal(null,null)">+ Ödünç Ver</button></div><div class="tw"><table><thead><tr><th>Kitap</th><th>Üye</th><th>Süre</th><th></th></tr></thead><tbody id="dash-odunc"></tbody></table></div></div>
+  </div>
+</div>
+
+<!-- KİTAPLAR -->
+<div class="page" id="page-kitaplar">
+  <div class="fbar">
+    <div class="fpill"><select id="tf" onchange="renderKitaplar()"><option value="">Tüm Türler</option></select></div>
+    <div class="fpill"><select id="sf" onchange="renderKitaplar()"><option value="ad">İsme Göre</option><option value="stok-asc">Stok ↑</option><option value="stok-desc">Stok ↓</option><option value="yeni">En Yeni</option></select></div>
+    <span style="font-size:12px;color:var(--text-3)" id="kclbl"></span>
+    <div style="margin-left:auto;display:flex;gap:8px"><button class="btn btn-s btn-sm" onclick="openOduncModal(null,null)">📖 Ödünç</button><button class="btn btn-p btn-sm" onclick="openKitapModal()">+ Kitap Ekle</button></div>
+  </div>
+  <div class="card"><div class="tw"><table><thead><tr><th>#</th><th>Kitap Adı</th><th>ISBN</th><th>Stok</th><th>Yayınevi</th><th>Tür</th><th>Yazar</th><th>İşlem</th></tr></thead><tbody id="ktbody"></tbody></table></div></div>
+</div>
+
+<!-- ÜYELER -->
+<div class="page" id="page-uyeler">
+  <div class="shdr">
+    <div class="stitle">Kayıtlı Üyeler</div>
+    <div style="display:flex;gap:8px"><input type="text" class="fi" style="width:190px;border-radius:var(--r-f)" placeholder="Üye ara…" oninput="searchUye(this.value)"><button class="btn btn-p btn-sm" onclick="openUyeModal()">+ Üye Kaydet</button></div>
+  </div>
+  <div class="mgrid" id="ugrid"></div>
+  <div id="udetay" style="display:none">
+    <div class="card">
+      <div class="card-hdr" style="background:linear-gradient(135deg,var(--accent-bg),var(--card-bg))">
+        <div><div class="card-title" id="d-baslik"></div><div class="card-sub" id="d-sub"></div></div>
+        <div style="display:flex;gap:6px"><button class="btn btn-p btn-sm" id="d-odunc">📖 Kitap Ver</button><button class="btn btn-s btn-sm" id="d-duzenle">✎ Düzenle</button><button class="btn btn-d btn-sm" id="d-sil">Sil</button><button class="btn btn-g btn-sm" onclick="closeDetay()">✕</button></div>
+      </div>
+      <div class="card-body">
+        <div style="display:flex;align-items:flex-start;gap:20px;margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--card-border)">
+          <div style="text-align:center"><div id="d-avatar" class="mavatar" style="width:56px;height:56px;font-size:20px;margin-bottom:6px"></div><div id="d-spill"></div></div>
+          <div style="flex:1">
+            <div style="font-family:'Lora',serif;font-size:17px;font-weight:700;color:var(--text-1)" id="d-ad"></div>
+            <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:8px">
+              <span style="font-size:12.5px;color:var(--text-2)" id="d-tc"></span>
+              <span style="font-size:12.5px;color:var(--blue)" id="d-ep"></span>
+              <span style="font-size:12.5px;color:var(--text-2)" id="d-tel"></span>
+            </div>
+            <div style="font-size:12px;color:var(--text-3);margin-top:4px" id="d-adres"></div>
+          </div>
+          <div id="d-stats" style="display:flex;gap:8px;flex-shrink:0"></div>
+        </div>
+        <div class="g2c" style="margin-bottom:1.25rem">
+          <div style="display:flex;flex-direction:column;gap:8px" id="d-info"></div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--text-1);margin-bottom:8px">Tür Dağılımı (Geçmiş)</div>
+            <div id="d-turdagilim"></div>
+          </div>
+        </div>
+        <div class="stitle" style="margin-bottom:10px">Ödünç Geçmişi</div>
+        <div class="tw"><table><thead><tr><th>Kitap</th><th>Alış</th><th>İade</th><th>Süre</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="d-tbody"></tbody></table></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ÖDÜNÇ -->
+<div class="page" id="page-islemler">
+  <div class="tabs"><div class="tab active" onclick="switchTab('all',this)">Tümü</div><div class="tab" onclick="switchTab('odunc',this)">Ödünçte</div><div class="tab" onclick="switchTab('iade',this)">İade Edildi</div></div>
+  <div class="card"><div class="card-hdr"><div class="card-title" id="itabtitle">Tüm İşlemler</div><button class="btn btn-p btn-sm" onclick="openOduncModal(null,null)">+ Ödünç Ver</button></div><div class="tw"><table><thead><tr><th>#</th><th>Kitap</th><th>Üye</th><th>Alış</th><th>İade</th><th>Süre</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="itbody"></tbody></table></div></div>
+</div>
+
+<!-- GECİKME -->
+<div class="page" id="page-gecikme">
+  <div class="ibox danger mb1">⏰ Ödünç süresi 14 günü aşan kitaplar listeleniyor.</div>
+  <div class="card"><div class="card-hdr"><div class="card-title">Geciken Kitaplar</div><span class="badge b-r" id="gc-c">0</span></div><div class="tw"><table><thead><tr><th>Kitap</th><th>Üye</th><th>Alış</th><th>Gecikme</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="gtbody"></tbody></table></div></div>
+</div>
+
+<!-- STOK -->
+<div class="page" id="page-stok">
+  <div class="g3c mb15">
+    <div class="card"><div class="card-body" style="text-align:center;padding:1.4rem"><div style="font-size:28px;margin-bottom:6px">🔴</div><div style="font-family:'Lora',serif;font-size:30px;font-weight:700;color:var(--red)" id="s-k">0</div><div style="font-size:11.5px;color:var(--text-3);margin-top:4px">Kritik (≤5)</div></div></div>
+    <div class="card"><div class="card-body" style="text-align:center;padding:1.4rem"><div style="font-size:28px;margin-bottom:6px">🟡</div><div style="font-family:'Lora',serif;font-size:30px;font-weight:700;color:var(--amber)" id="s-d">0</div><div style="font-size:11.5px;color:var(--text-3);margin-top:4px">Düşük (≤15)</div></div></div>
+    <div class="card"><div class="card-body" style="text-align:center;padding:1.4rem"><div style="font-size:28px;margin-bottom:6px">📦</div><div style="font-family:'Lora',serif;font-size:30px;font-weight:700;color:var(--accent)" id="s-t">0</div><div style="font-size:11.5px;color:var(--text-3);margin-top:4px">Toplam Stok</div></div></div>
+  </div>
+  <div class="card"><div class="card-hdr"><div class="card-title">Düşük Stok Uyarıları</div></div><div class="tw"><table><thead><tr><th>Kitap</th><th>Stok</th><th>Doluluk</th><th>Seviye</th><th>İşlem</th></tr></thead><tbody id="stbody"></tbody></table></div></div>
+</div>
+
+<!-- İSTATİSTİK -->
+<div class="page" id="page-istatistik">
+  <div class="stats-row mb1">
+    <div class="sc"><div class="sc-chip chip-g">📚</div><div class="sc-val" id="is-k">—</div><div class="sc-label">Toplam Kitap</div></div>
+    <div class="sc"><div class="sc-chip chip-b">📦</div><div class="sc-val" id="is-s">—</div><div class="sc-label">Toplam Stok</div></div>
+    <div class="sc"><div class="sc-chip chip-a">📊</div><div class="sc-val" id="is-o">—</div><div class="sc-label">Ort. Stok</div></div>
+    <div class="sc"><div class="sc-chip chip-g">✅</div><div class="sc-val" id="is-i">—</div><div class="sc-label">Toplam İade</div></div>
+  </div>
+  <div class="g2c mb1">
+    <div class="card"><div class="card-hdr"><div class="card-title">Yazar Dağılımı</div></div><div class="card-body" id="is-y"></div></div>
+    <div class="card"><div class="card-hdr"><div class="card-title">Yayınevi Dağılımı</div></div><div class="card-body" id="is-yn"></div></div>
+  </div>
+  <div class="card"><div class="card-hdr"><div class="card-title">Kitap Stok Görünümü</div></div><div class="card-body" id="is-st"></div></div>
+</div>
+
+<!-- LOGLAR -->
+<div class="page" id="page-loglar">
+  <div class="fbar">
+    <div class="fpill"><select id="lf" onchange="renderLogs()"><option value="">Tüm Seviyeler</option><option value="Information">Bilgi</option><option value="Warning">Uyarı</option><option value="Error">Hata</option></select></div>
+    <button class="btn btn-g btn-sm" onclick="renderLogs();toast('Yenilendi','i')">🔄 Yenile</button>
+    <button class="btn btn-g btn-sm" onclick="loglar=[];renderLogs();toast('Temizlendi','i')">🗑 Temizle</button>
+    <span class="badge b-n" id="log-b">0 kayıt</span>
+  </div>
+  <div class="card"><div class="tw"><table><thead><tr><th>#</th><th>Seviye</th><th>Mesaj</th><th>Zaman</th></tr></thead><tbody id="ltbody"></tbody></table></div></div>
+</div>
+
+</div></main>
+
+<!-- CMD PALETTE -->
+<div class="cmd-ov" id="cov" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="cmd-box">
+    <div class="cmd-row"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input class="cmd-inp" id="cinp" placeholder="Komut veya arama…" oninput="filterCmd(this.value)" onkeydown="cmdKey(event)"></div>
+    <div class="cmd-res" id="cres"></div>
+    <div class="cmd-foot"><span>↑↓ Seç</span><span>↵ Çalıştır</span><span>Esc Kapat</span></div>
+  </div>
+</div>
+
+<!-- MODAL: KİTAP -->
+<div class="overlay" id="mk">
+  <div class="modal">
+    <div class="mhdr"><div class="mtitle"><span id="mk-i">📗</span><span id="mk-t">Kitap Ekle</span></div><button class="mx" onclick="closeModal('mk')">✕</button></div>
+    <div class="mbody">
+      <input type="hidden" id="fk-id">
+      <div class="fg"><label class="fl">Kitap Adı *</label><input class="fi" id="fk-ad" placeholder="Kitap adı…" oninput="prevISBN()"></div>
+      <div class="g2">
+        <div class="fg"><label class="fl">ISBN <span style="font-weight:400;text-transform:none;font-size:10px;color:var(--text-3)">— otomatik</span></label><input class="fi" id="fk-isbn" readonly placeholder="Otomatik…"><div class="fh">ISBN-13 · Kitap adı + ID bazlı benzersiz</div></div>
+        <div class="fg"><label class="fl">Stok *</label><input class="fi" id="fk-stok" type="number" min="0" placeholder="0"></div>
+      </div>
+      <div class="g2">
+        <div class="fg"><label class="fl">Yazar</label><div class="sdd"><input class="fi" id="fk-y-inp" placeholder="Yazar ara…" autocomplete="off"><input type="hidden" id="fk-y"><div class="sdd-drop" id="sdd-fky"></div></div></div>
+        <div class="fg"><label class="fl">Tür</label><div class="sdd"><input class="fi" id="fk-t-inp" placeholder="Tür ara…" autocomplete="off"><input type="hidden" id="fk-t"><div class="sdd-drop" id="sdd-fkt"></div></div></div>
+      </div>
+      <div class="fg"><label class="fl">Yayınevi</label><div class="sdd"><input class="fi" id="fk-yn-inp" placeholder="Yayınevi ara…" autocomplete="off"><input type="hidden" id="fk-yn"><div class="sdd-drop" id="sdd-fkyn"></div></div></div>
+    </div>
+    <div class="mfooter"><button class="btn btn-g" onclick="closeModal('mk')">İptal</button><button class="btn btn-p" onclick="saveKitap()">Kaydet</button></div>
+  </div>
+</div>
+
+<!-- MODAL: ÜYE -->
+<div class="overlay" id="mu">
+  <div class="modal wide">
+    <div class="mhdr"><div class="mtitle"><span id="mu-i">👤</span><span id="mu-t">Yeni Üye Kaydı</span></div><button class="mx" onclick="closeModal('mu')">✕</button></div>
+    <!-- 3 sekme: Kimlik / İletişim / Üyelik -->
+    <div class="mtabs">
+      <button class="mtab active" onclick="switchMtab('kimlik',this)">🪪 Kimlik</button>
+      <button class="mtab" onclick="switchMtab('iletisim',this)">📞 İletişim</button>
+      <button class="mtab" onclick="switchMtab('uyelik',this)">🛡 Üyelik Statüsü</button>
+    </div>
+    <div class="mbody">
+      <!-- KİMLİK -->
+      <div class="mpanel active" id="mup-kimlik">
+        <div class="g2">
+          <div class="fg"><label class="fl">Ad *</label><input class="fi" id="fu-a" placeholder="Ad"></div>
+          <div class="fg"><label class="fl">Soyad *</label><input class="fi" id="fu-s" placeholder="Soyad"></div>
+        </div>
+        <div class="fg">
+          <label class="fl">T.C. Kimlik No *</label>
+          <input class="fi" id="fu-tc" placeholder="11 haneli T.C. Kimlik Numarası" maxlength="11" oninput="this.value=this.value.replace(/\D/g,'')">
+          <div class="fh">Yasal süreç ve kayıt doğrulaması için zorunludur</div>
+        </div>
+        <div class="fg">
+          <label class="fl">Üye Barkod / Kart No</label>
+          <div style="display:flex;gap:8px"><input class="fi" id="fu-barkod" placeholder="Otomatik oluşturulur" style="flex:1"><button class="btn btn-s btn-sm" onclick="genBarkod()" type="button">🔄 Üret</button></div>
+          <div class="fh">Üye kartına basılacak benzersiz barkod numarası</div>
+        </div>
+      </div>
+      <!-- İLETİŞİM -->
+      <div class="mpanel" id="mup-iletisim">
+        <div class="fg"><label class="fl">E-Posta</label><input class="fi" id="fu-e" type="email" placeholder="ornek@posta.com"></div>
+        <div class="fg"><label class="fl">Telefon</label><input class="fi" id="fu-tel" placeholder="+90 5XX XXX XX XX"></div>
+        <div class="fg">
+          <label class="fl">Adres</label>
+          <textarea class="fi" id="fu-adres" placeholder="İlçe, Şehir" rows="3"></textarea>
+          <div class="fh">Resmi tebligat ve iade edilmeyen kitaplar için saklanır</div>
+        </div>
+      </div>
+      <!-- ÜYELİK STATÜSÜ -->
+      <div class="mpanel" id="mup-uyelik">
+        <div class="g2">
+          <div class="fg">
+            <label class="fl">Üyelik Başlangıç Tarihi</label>
+            <input class="fi" id="fu-baslangic" type="date">
+            <div class="fh">Üyeliğin resmi olarak başladığı tarih</div>
+          </div>
+          <div class="fg">
+            <label class="fl">Maks. Ödünç Limiti</label>
+            <input class="fi" id="fu-max" type="number" min="1" max="20" value="5">
+            <div class="fh">Aynı anda taşıyabileceği kitap sayısı</div>
+          </div>
+        </div>
+        <div class="fg">
+          <label class="fl">Gecikme Cezası (₺)</label>
+          <input class="fi" id="fu-ceza" type="number" min="0" value="0" placeholder="0">
+          <div class="fh">Birikmiş ceza varsa yeni ödünç işlemi engellenir</div>
+        </div>
+        <div style="display:flex;gap:16px;margin-top:4px">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13.5px;color:var(--text-2)">
+            <input type="checkbox" id="fu-aktif" checked style="width:16px;height:16px;accent-color:var(--accent)">Üyelik Aktif
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13.5px;color:var(--red)">
+            <input type="checkbox" id="fu-bl" style="width:16px;height:16px;accent-color:var(--red)">Kara Listede
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="mfooter">
+      <span style="font-size:12px;color:var(--text-3);margin-right:auto" id="mu-hint">Sonraki: İletişim →</span>
+      <button class="btn btn-g" onclick="closeModal('mu')">İptal</button>
+      <button class="btn btn-p" onclick="saveUye()">Kaydı Oluştur</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ÖDÜNÇ -->
+<div class="overlay" id="mo">
+  <div class="modal">
+    <div class="mhdr"><div class="mtitle">📖 Kitap Ödünç Ver</div><button class="mx" onclick="closeModal('mo')">✕</button></div>
+    <div class="mbody">
+      <div class="fg"><label class="fl">Üye *</label><div class="sdd"><input class="fi" id="fo-u-inp" placeholder="Üye ara…" autocomplete="off"><input type="hidden" id="fo-u"><div class="sdd-drop" id="sdd-fou"></div></div><div id="oi-u" style="margin-top:7px;min-height:18px"></div></div>
+      <div class="fg"><label class="fl">Kitap *</label><div class="sdd"><input class="fi" id="fo-k-inp" placeholder="Kitap ara…" autocomplete="off"><input type="hidden" id="fo-k"><div class="sdd-drop" id="sdd-fok"></div></div><div id="oi-k" style="margin-top:7px;min-height:18px"></div></div>
+      <div class="ibox">💡 Ödünç verildiğinde stok 1 azalır ve gecikme takibine alınır.</div>
+    </div>
+    <div class="mfooter"><button class="btn btn-g" onclick="closeModal('mo')">İptal</button><button class="btn btn-p" onclick="saveOdunc()">✓ Ödünç Ver</button></div>
+  </div>
+</div>
+
+<!-- MODAL: ONAY -->
+<div class="overlay" id="mc">
+  <div class="modal" style="width:380px">
+    <div class="mhdr"><div class="mtitle">🗑 Silme Onayı</div><button class="mx" onclick="closeModal('mc')">✕</button></div>
+    <div class="mbody"><p style="color:var(--text-2);font-size:14px;line-height:1.6" id="cmsg"></p></div>
+    <div class="mfooter"><button class="btn btn-g" onclick="closeModal('mc')">İptal</button><button class="btn btn-d" id="cok">Evet, Sil</button></div>
+  </div>
+</div>
+
+<div class="tz" id="tz"></div>
+
+<script src="style/script/script.js">
+
+</script>
+</body>
+</html>
