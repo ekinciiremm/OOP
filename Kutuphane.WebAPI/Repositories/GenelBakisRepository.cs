@@ -215,9 +215,12 @@ namespace Kutuphane.WebAPI.Repositories
         public List<TumKitaplarDto> TumKitaplar()
         {
             var tumKitaplar = new List<TumKitaplarDto>();
-            string query = "select K.Kitap_adi, K.ISBN, K.Stok_adedi,Ye.Yayin_evi_adi, KT.TurAdi,  (Y.Yazar_ad + ' ' + Y.Yazar_soyad) AS Yazar" +
-                " from Kitaplar K join Yazarlar Y on K.Yazar_id = Y.Yazar_id join KitapTurleri KT on " +
-                "K.Tur_id = KT.Tur_id  join YayinEvleri Ye on K.Yayin_evi_id = Ye.Yayin_evi_id";
+            string query = "select K.Kitap_adi, K.ISBN, K.Stok_adedi, K.Konum, Ye.Yayin_evi_adi, KT.TurAdi, " +
+"(Y.Yazar_ad + ' ' + Y.Yazar_soyad) AS Yazar " +
+"from Kitaplar K " +
+"join Yazarlar Y on K.Yazar_id = Y.Yazar_id " +
+"join KitapTurleri KT on K.Tur_id = KT.Tur_id " +
+"join YayinEvleri Ye on K.Yayin_evi_id = Ye.Yayin_evi_id";
 
             try
             {
@@ -232,7 +235,8 @@ namespace Kutuphane.WebAPI.Repositories
                             Stok = Convert.ToInt32(reader["Stok_adedi"]),
                             YayinEvi = reader["Yayin_evi_adi"].ToString(),
                             Tur = reader["TurAdi"].ToString(),
-                            Yazar = reader["Yazar"].ToString()
+                            Yazar = reader["Yazar"].ToString(),
+                            Konum = reader["Konum"].ToString()
                         };
                         tumKitaplar.Add(kitap);
                     }

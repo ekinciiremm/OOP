@@ -36,6 +36,7 @@
         public string YayinEvi { get; set; }
         public string Tur { get; set; }
         public string Yazar { get; set; }
+        public string Konum { get; set; }
     }
     public class SonEklenenKitapDto
     {

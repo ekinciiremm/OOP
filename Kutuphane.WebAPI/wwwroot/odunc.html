@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kütüphane Zekâsı — Ödünç İşlemleri</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<style>
+* { font-family: 'Inter', sans-serif; }
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+body { background: #f1f5f9; }
+::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+</style>
+</head>
+<body class="text-slate-800">
+
+<aside id="sidebar" class="fixed left-0 top-0 h-screen w-64 z-50 bg-slate-900 flex flex-col overflow-y-auto"></aside>
+
+<header class="fixed top-0 right-0 left-64 h-16 z-40 bg-white border-b border-slate-200 flex items-center justify-between px-6 shadow-sm">
+  <div>
+    <h1 class="text-lg font-bold text-slate-900">Ödünç İşlemleri</h1>
+    <p class="text-xs text-slate-400">Ödünç verin, takip edin, iade alın</p>
+  </div>
+  <div class="flex items-center gap-4">
+    <button class="relative text-slate-500 hover:text-indigo-600 transition-colors">
+      <span class="material-symbols-outlined">notifications</span>
+      <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+    </button>
+    <div class="flex items-center gap-2.5 border-l border-slate-200 pl-4">
+      <div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white text-xs font-bold">SY</div>
+      <div class="hidden sm:block">
+        <p class="text-xs font-bold text-slate-900 leading-none">Dr. Selim Yılmaz</p>
+        <p class="text-[10px] text-slate-400">Baş Kütüphaneci</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="ml-64 pt-16 min-h-screen">
+  <div class="p-6 space-y-6">
+
+    <!-- Başlık + Yeni Ödünç -->
+    <div class="flex items-center justify-between">
+      <div>
+        <h2 class="text-2xl font-black text-slate-900">Ödünç İşlemleri</h2>
+        <p class="text-sm text-slate-500 mt-0.5">Aktif ödünçleri takip edin, iade işlemlerini yönetin.</p>
+      </div>
+      <button data-open-loan-modal
+        class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-semibold text-sm shadow-lg shadow-indigo-200 transition-all active:scale-95">
+        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1">add</span>
+        Yeni Ödünç Ver
+      </button>
+    </div>
+
+    <!-- Stat Kartlar -->
+    <div class="grid grid-cols-3 gap-4">
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+        <div class="flex items-center justify-between mb-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600">
+            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">swap_horiz</span>
+          </div>
+          <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">Aktif</span>
+        </div>
+        <p class="text-2xl font-black text-slate-900" id="stat-active-loans">—</p>
+        <p class="text-xs text-slate-500 font-medium mt-1">Aktif Ödünç</p>
+      </div>
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-red-50 bg-red-50/30">
+        <div class="flex items-center justify-between mb-3">
+          <div class="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center text-red-600">
+            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">event_busy</span>
+          </div>
+          <span class="text-xs font-bold text-red-600 bg-red-100 px-2 py-0.5 rounded-full">Acil</span>
+        </div>
+        <p class="text-2xl font-black text-red-600" id="stat-overdue-loans">—</p>
+        <p class="text-xs text-slate-500 font-medium mt-1">Gecikmiş</p>
+      </div>
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+        <div class="flex items-center justify-between mb-3">
+          <div class="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center text-green-600">
+            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">assignment_return</span>
+          </div>
+          <span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">Toplam</span>
+        </div>
+        <p class="text-2xl font-black text-slate-900" id="stat-returned-loans">—</p>
+        <p class="text-xs text-slate-500 font-medium mt-1">İade Edildi</p>
+      </div>
+    </div>
+
+    <!-- İki Kolon: Tablo + Gecikmiş Sidebar -->
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+      <!-- Ana Tablo -->
+      <div class="xl:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-wrap gap-3">
+          <div class="flex items-center gap-2">
+            <button data-loan-filter="all" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white transition-all">Tümü</button>
+            <button data-loan-filter="Aktif" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-all">Aktif</button>
+            <button data-loan-filter="Gecikmiş" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-all">Gecikmiş</button>
+            <button data-loan-filter="İade Edildi" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-all">İade Edildi</button>
+          </div>
+          <button class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200">
+            <span class="material-symbols-outlined text-[16px]">download</span>Dışa Aktar
+          </button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead class="bg-slate-50 text-xs text-slate-500 uppercase tracking-wider">
+              <tr>
+                <th class="px-6 py-3.5 font-bold">Üye</th>
+                <th class="px-6 py-3.5 font-bold">Kitap</th>
+                <th class="px-6 py-3.5 font-bold">Ödünç Tarihi</th>
+                <th class="px-6 py-3.5 font-bold">Teslim Tarihi</th>
+                <th class="px-6 py-3.5 font-bold">Durum</th>
+                <th class="px-6 py-3.5 font-bold text-right">İşlem</th>
+              </tr>
+            </thead>
+            <tbody id="loans-tbody" class="divide-y divide-slate-100">
+              <tr><td colspan="6" class="px-6 py-12 text-center text-slate-400 text-sm">Yükleniyor...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Gecikmiş Kitaplar Sidebar -->
+      <div class="bg-slate-900 rounded-2xl p-5 shadow-xl text-white flex flex-col">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-bold text-white flex items-center gap-2">
+            <span class="material-symbols-outlined text-red-400 text-[18px]" style="font-variation-settings:'FILL' 1">event_busy</span>
+            Gecikmiş Kitaplar
+          </h3>
+        </div>
+        <div id="overdue-list" class="space-y-3 flex-1">
+          <p class="text-slate-400 text-sm text-center py-4">Yükleniyor...</p>
+        </div>
+        <a href="#" onclick="document.querySelector('[data-loan-filter=\'Gecikmiş\']').click(); return false;"
+          class="mt-4 block text-center py-2.5 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition-all">
+          Tüm Listeyi Görüntüle
+        </a>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- MODAL: Yeni Ödünç -->
+<div id="loan-modal" class="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+  <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden">
+    <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+      <div>
+        <h3 class="text-lg font-bold text-slate-900">Yeni Ödünç İşlemi</h3>
+        <p class="text-xs text-slate-500 mt-0.5">Üyeye kitap ödünç verin.</p>
+      </div>
+      <button data-close-loan-modal class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-all">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="p-6 space-y-4">
+      <div class="space-y-1.5">
+        <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Üye Seç *</label>
+        <select id="loan-member"
+          class="w-full rounded-xl border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all bg-white">
+          <option value="">Üye seçin...</option>
+        </select>
+      </div>
+      <div class="space-y-1.5">
+        <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Kitap Seç *</label>
+        <select id="loan-book"
+          class="w-full rounded-xl border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all bg-white">
+          <option value="">Kitap seçin...</option>
+        </select>
+      </div>
+      <div class="space-y-1.5">
+        <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Teslim Tarihi *</label>
+        <input id="loan-duedate" type="date"
+          class="w-full rounded-xl border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all"/>
+      </div>
+      <div class="bg-indigo-50 rounded-xl p-3 flex items-start gap-2">
+        <span class="material-symbols-outlined text-indigo-600 text-[16px] mt-0.5">info</span>
+        <p class="text-xs text-indigo-700">Varsayılan ödünç süresi <strong>14 gün</strong>'dür. Teslim tarihini manuel olarak değiştirebilirsiniz.</p>
+      </div>
+    </div>
+    <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-3">
+      <button data-close-loan-modal
+        class="px-5 py-2.5 text-sm font-semibold text-slate-600 hover:text-slate-800 hover:bg-slate-200 rounded-xl transition-all">İptal</button>
+      <button id="loan-save-btn"
+        class="px-6 py-2.5 text-sm font-bold bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-lg shadow-indigo-200 transition-all active:scale-95">
+        Ödünç Ver
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
