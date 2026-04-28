@@ -75,14 +75,14 @@ body { background: #f1f5f9; }
                     <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 mb-3">
                         <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1">swap_horiz</span>
                     </div>
-                    <p class="text-2xl font-black text-slate-900">—</p>
+                    <p class="text-2xl font-black text-slate-900" id="book-borrowed-count">—</p>
                     <p class="text-xs text-slate-500 font-medium mt-1">Ödünçte</p>
                 </div>
                 <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
                     <div class="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 mb-3">
                         <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1">category</span>
                     </div>
-                    <p class="text-2xl font-black text-slate-900">7</p>
+                    <p class="text-2xl font-black text-slate-900" id="book-category-count">7</p>
                     <p class="text-xs text-slate-500 font-medium mt-1">Kategori</p>
                 </div>
             </div>
@@ -149,8 +149,9 @@ body { background: #f1f5f9; }
                     </div>
                     <div class="col-span-2 sm:col-span-1 space-y-1.5">
                         <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Yazar *</label>
-                        <input id="book-author" type="text" placeholder="Yazar adı"
-                               class="w-full rounded-xl border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all" />
+                        <select id="book-author" class="w-full rounded-xl border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all bg-white">
+                            <option value="">Yazar Seçin...</option>
+                        </select>
                     </div>
                     <div class="col-span-2 sm:col-span-1 space-y-1.5">
                         <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">ISBN</label>
@@ -176,7 +177,7 @@ body { background: #f1f5f9; }
                     </div>
                     <div class="col-span-2 sm:col-span-1 space-y-1.5">
                         <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Yayınevi</label>
-                        <input id="book-publisher" type="text" placeholder="Yayınevi adı"
+                        <select id="book-publisher" type="text" placeholder="Yayınevi adı"
                                class="w-full rounded-xl border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all" />
                     </div>
                     <div class="col-span-2 sm:col-span-1 space-y-1.5">
@@ -209,51 +210,196 @@ body { background: #f1f5f9; }
         </div>
     </div>
 
-    <script src="js/app.js"></script>
     <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+
     <script>
 
+       
         async function kitaplariYukle() {
-            const kitaplar = await API.kitaplariGetir();
-            const tbody = document.getElementById('books-tbody'); // ID'nin HTML ile aynı olduğundan emin ol
+            try {
+                const response = await API.kitaplariGetir();
+                // Eğer API'den sayfalama verisi geliyorsa (örneğin response.data içindeyse) onu al, yoksa direkt response'u al
+                const kitaplar = response.items || response.data || response;
 
-            if (kitaplar && tbody) {
-                tbody.innerHTML = ''; // Önce tabloyu (eski örnekleri) temizle
+                const tbody = document.getElementById('books-tbody');
+                if (!tbody) return;
+
+                tbody.innerHTML = ''; // Temizle
+
+                if (!Array.isArray(kitaplar) || kitaplar.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" class="text-center py-10 text-slate-400">Kitap bulunamadı.</td></tr>';
+                    return;
+                }
 
                 kitaplar.forEach(kitap => {
-                    // Veritabanından gelen isimler DTO'dakiyle aynı olmalı (örn: kitap.konum veya kitap.Konum)
+                    // Veri eksik gelirse JS çökmesin (Null check)
+                    const id = kitap.id || 0;
+                    const ad = kitap.ad || 'Adsız Kitap';
+                    const yazar = kitap.yazar || 'Bilinmiyor';
+                    const suankiStok = kitap.stok || 0;
+                    const maxStok = kitap.toplamStok || suankiStok || 1;
+                    const yuzde = (suankiStok / maxStok) * 100;
+
                     tbody.innerHTML += `
-            <tr class="border-b hover:bg-gray-50 transition">
-                <td class="p-4">
-                    <div class="font-bold text-gray-800">${kitap.ad}</div>
-                    <div class="text-sm text-gray-500">${kitap.yazar}</div>
+            <tr class="border-b hover:bg-slate-50 transition text-sm">
+                <td class="px-6 py-4">
+                    <div class="font-bold text-slate-900">${ad}</div>
+                    <div class="text-[11px] text-slate-500">${yazar}</div>
                 </td>
-                <td class="p-4 text-sm text-gray-600">${kitap.ISBN}</td>
-                <td class="p-4"><span class="px-2 py-1 bg-purple-50 text-purple-600 rounded text-xs">${kitap.tur}</span></td>
-                <td class="p-4 text-sm">${kitap.yayinEvi}</td>
-                <td class="p-4 text-sm font-medium text-gray-700">
-                    <span class="bg-gray-100 px-2 py-1 rounded">${kitap.konum || '—'}</span>
+                <td class="px-6 py-4 text-slate-500 font-mono text-[11px]">${kitap.isbn || '-'}</td>
+                <td class="px-6 py-4">
+                    <span class="px-2 py-0.5 bg-purple-50 text-purple-600 rounded text-[10px] font-bold uppercase">${kitap.tur || '-'}</span>
                 </td>
-                <td class="p-4">
-                    <div class="flex items-center gap-2">
-                        <span class="text-sm font-semibold">${kitap.stok}</span>
+                <td class="px-6 py-4 text-slate-600">${kitap.yayinEvi || '-'}</td>
+                <td class="px-6 py-4">
+                    <div class="flex flex-col gap-1 w-24">
+                        <div class="flex justify-between text-[10px] font-bold text-slate-500">
+                            <span>${suankiStok}</span><span class="text-slate-300">/</span><span>${maxStok}</span>
+                        </div>
+                        <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-indigo-500" style="width: ${yuzde}%"></div>
+                        </div>
                     </div>
                 </td>
-                <td class="p-4 text-center">
-                    <button onclick="kitapDuzenle(${kitap.id})" class="text-blue-500 hover:text-blue-700 mx-2">✎</button>
-                    <button onclick="kitapSil(${kitap.id})" class="text-red-500 hover:text-red-700">🗑</button>
+                <td class="px-6 py-4 text-center text-slate-500">${kitap.konum || '—'}</td>
+                <td class="px-6 py-4 text-center">
+                    <span class="text-[10px] font-bold uppercase ${suankiStok > 0 ? 'text-green-600' : 'text-red-500'}">
+                        ${suankiStok > 0 ? 'Mevcut' : 'Tükendi'}
+                    </span>
                 </td>
-            </tr>
-        `;
+                <td class="px-6 py-4 text-right">
+                    <div class="flex justify-end gap-2">
+                        <button class="p-1 text-indigo-600 hover:bg-indigo-50 rounded">✎</button>
+                        <button onclick="silmeTetikle(${id})" class="p-1 text-red-500 hover:bg-red-50 rounded">
+                            <span class="material-symbols-outlined text-[18px]">delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>`;
                 });
+            } catch (error) {
+                console.error("Tablo yüklenirken hata oluştu:", error);
             }
         }
 
+        async function kitapIstatistikGetir() {
+            try {
+                const response = await fetch('/api/GenelBakis/kitap-istatistik');
+                if (!response.ok) throw new Error('Hata');
+                return await response.json();
+            } catch (error) {
+                console.error('API Hatası:', error);
+                return null;
+            }
+        }
+        document.addEventListener('DOMContentLoaded', async () => {
+            await kitaplariYukle();
+            await modalListeleriniDoldur();
+            
 
+            const stats = await kitapIstatistikGetir();
+            console.log("Gelen İstatistik:", stats);
+            if (stats) {
+                document.getElementById('book-total-count').textContent = stats.tumKitapToplam;
+                document.getElementById('book-avail-count').textContent = stats.musaitKopya;  // boşluk YOK
+                document.getElementById('book-borrowed-count').textContent = stats.aktifOdunc;
+                document.getElementById('book-category-count').textContent = stats.kategoriSayisi;
+            }
+        });
 
+        // DOMContentLoaded içine veya scriptin uygun bir yerine:
+document.addEventListener('click', async (e) => {
+    // Eğer tıklanan eleman bir sayfa butonuysa (Genelde app.js içindeki mantığa göre)
+    if (e.target.closest('#book-pagination button')) {
+        const pageNum = e.target.innerText; // Tıklanan butonun üzerindeki sayı (1, 2, 3...)
+        if (!isNaN(pageNum)) {
+            console.log(pageNum + ". sayfaya geçiliyor...");
+            await kitaplariYukle(pageNum); 
+        }
+    }
+});
 
-        document.addEventListener('DOMContentLoaded', kitaplariYukle);
+        async function modalListeleriniDoldur() {
+            // Üç listeyi de paralel çekelim
+            const [yazarlar, turler, yayinevleri] = await Promise.all([
+                API.yazarlariGetir(),
+                API.turleriGetir(),
+                API.yayinEviGetir()
+            ]);
 
+            // Yazar listesini doldur
+            const yazarSelect = document.getElementById('book-author');
+            if (yazarSelect) {
+                yazarSelect.innerHTML = '<option value="">Yazar Seçin...</option>';
+                yazarlar.forEach(y => yazarSelect.innerHTML += `<option value="${y.id}">${y.ad}</option>`);
+            }
+
+            // Tür listesini doldur
+            const turSelect = document.getElementById('book-category');
+            if (turSelect) {
+                turSelect.innerHTML = '<option value="">Kategori Seçin...</option>';
+                turler.forEach(t => turSelect.innerHTML += `<option value="${t.id}">${t.ad}</option>`);
+            }
+
+            // Yayınevi listesini doldur
+            const yayineviSelect = document.getElementById('book-publisher');
+            if (yayineviSelect) {
+                yayineviSelect.innerHTML = '<option value="">Yayınevi Seçin...</option>';
+                yayinevleri.forEach(ye => yayineviSelect.innerHTML += `<option value="${ye.id}">${ye.ad}</option>`);
+            }
+        }
+
+        document.getElementById('book-save-btn').addEventListener('click', async () => {
+            // Objeyi senin DTO'na (Ad, ISBN, Stok, YayinEviId, TurId, YazarId) göre hazırlıyoruz
+            const yeniKitap = {
+                ad: document.getElementById('book-title').value,
+                isbn: document.getElementById('book-isbn').value,
+                stok: parseInt(document.getElementById('book-copies').value) || 0,
+                yayinEviId: parseInt(document.getElementById('book-publisher').value),
+                turId: parseInt(document.getElementById('book-category').value),
+                yazarId: parseInt(document.getElementById('book-author').value)
+            };
+
+            // Basit kontrol
+            if (!yeniKitap.ad || !yeniKitap.yazarId) {
+                alert("Lütfen en azından kitap adını ve yazarını seçin!");
+                return;
+            }
+
+            const basarili = await API.kitapEkle(yeniKitap);
+            if (basarili) {
+                alert("Kitap kütüphaneye başarıyla katıldı! 📚");
+                location.reload(); // Listeyi tazele
+            } else {
+                alert("Ekleme başarısız. Girdiğiniz verileri ve veritabanı bağlantısını kontrol edin.");
+            }
+        });
+
+        // window. diyerek bu fonksiyonu tüm sayfalarda 'ölümsüz' yapıyoruz
+        window.silmeTetikle = function (id) {
+            const mesaj = "Bu kitabı silmek istediğinize emin misiniz?";
+
+            if (typeof kzConfirm === 'function') {
+                kzConfirm(mesaj, async () => {
+                    await window.kitapSilmeIslemi(id);
+                });
+            } else {
+                if (confirm(mesaj)) {
+                    window.kitapSilmeIslemi(id);
+                }
+            }
+        };
+
+        window.kitapSilmeIslemi = async function (id) {
+            const basarili = await API.kitapSil(id);
+            if (basarili) {
+                alert("Kitap başarıyla silindi.");
+                location.reload();
+            } else {
+                alert("Hata: Kitap silinemedi. Backend veya veritabanı kısıtlamalarını kontrol edin.");
+            }
+        };
     </script>
 </body>
 </html>

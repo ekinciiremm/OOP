@@ -1040,3 +1040,5 @@ document.addEventListener('DOMContentLoaded', () => {
     case 'loglar': renderSidebar('loglar'); initLogsPage(); break;
   }
 });
+
+

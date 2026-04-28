@@ -20,7 +20,12 @@ namespace Kutuphane.WebAPI.Repositories
         // Yeni bir kitap ekler
         public bool KitapEkle(KitapEkleDTO kitap)
         {
-            
+            if (string.IsNullOrWhiteSpace(kitap.ISBN))
+            {
+                kitap.ISBN = BenzersizIsbnUret(); 
+                _loggerService.LogInfo($"ISBN boş geldi, otomatik üretildi: {kitap.ISBN}");
+            }
+
             string sorgu = "insert into Kitaplar (Kitap_adi, ISBN, Stok_adedi, Yayin_evi_id, Tur_id, Yazar_id) " +
                            "values (@ad, @isbn, @stok, @yayinEviId, @turId, @yazarId)";
 

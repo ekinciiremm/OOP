@@ -15,9 +15,17 @@
         public List<TurDto> TumTurler { get; set; }
 
         public List<YazarDto> TumYazarlar { get; set; }
+
+        public List<KitapIstatistikDTO> KitapIstatistikleri { get; set; }
     }
 
-
+    public class  KitapIstatistikDTO
+    {
+        public int TumKitapToplam { get; set; }
+        public int MusaitKopya { get; set; }
+        public int AktifOdunc { get; set; }
+        public int KategoriSayisi { get; set; }
+    }
     public class YazarDto
     {
         public string YazarAd { get; set; }

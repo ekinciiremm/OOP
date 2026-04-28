@@ -4,6 +4,7 @@
     {
     
         public string Ad { get; set; }
+      
         public int Id { get; set; }
        
     }

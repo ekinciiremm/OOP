@@ -8,6 +8,9 @@ namespace Kutuphane.WebAPI.Repositories
         int KayitliUye();
         int AktifOdunc();
         int GecikenKitap();
+        int TumToplamKitap();
+        int KategoriSayisi();
+        int MusaitKopya();
 
         List<DTOs.SonEklenenKitapDto> SonEklenenKitaplar();
 

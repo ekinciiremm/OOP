@@ -32,6 +32,20 @@ namespace Kutuphane.WebAPI.Controllers
             return Ok(genelBakis);
         }
 
+        [HttpGet("kitap-istatistik")]
+        public IActionResult GetTumToplamKitap() {
+
+            var kitapİstatistik = new KitapIstatistikDTO
+            { 
+                TumKitapToplam = _repo.TumToplamKitap(),
+                MusaitKopya = _repo.MusaitKopya(),
+                AktifOdunc = _repo.AktifOdunc(),
+                KategoriSayisi = _repo.KategoriSayisi()
+
+            };
+            return Ok(kitapİstatistik);
+        }
+
         [HttpGet("son-eklenenler")]
         public IActionResult GetSonEklenenler()
         {

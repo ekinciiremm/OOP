@@ -67,11 +67,32 @@ namespace Kutuphane.WebAPI.Repositories
             }
        
         }
+        public int TumToplamKitap()
+        {
+            int tumToplamKitap = ExecuteCount("select sum(Stok_adedi) from Kitaplar");
+            return tumToplamKitap;
+        }
+
+        public int MusaitKopya()
+        {
+            int toplamKitap = TumToplamKitap();
+            int aktifOdunc = AktifOdunc();
+            int musaitKopya = toplamKitap - aktifOdunc;
+            return musaitKopya;
+        }
+
+        public int KategoriSayisi()
+        {
+            int kategoriSayisi = ExecuteCount("select count(*) from KitapTurleri");
+            return kategoriSayisi;
+        }
+
         public int ToplamKitap()
         {
             int toplamKitap = ExecuteCount("select count(*) from Kitaplar");
             return toplamKitap;
         }
+
 
        
         public int KayitliUye()
@@ -82,7 +103,7 @@ namespace Kutuphane.WebAPI.Repositories
 
         public int AktifOdunc()
         {
-            int aktifOdunc = ExecuteCount("select count(*) from dbo.KitapAlmaİslemleri where Islem_durumu = 'Aktif'");
+            int aktifOdunc = ExecuteCount("select count(*) from dbo.KitapAlmaİslemleri where Iade_tarihi is null");
             return aktifOdunc;
         }
             

@@ -24,21 +24,21 @@ namespace Kutuphane.WebAPI.Controllers
         [HttpGet("yazarlar")]
         public IActionResult GetYazarlar()
         {
-            var yazarlar = _genelRepo.ListeVeri("Yazarlar", "Yazar_id", "Yazar_ad");
+            var yazarlar = _genelRepo.ListeVeri("Yazarlar", "Yazar_id", "Yazar_ad + ' ' + Yazar_soyad");
             return Ok(yazarlar);
         }
 
         [HttpGet("turler")]
         public IActionResult GetTurler()
         {
-            var turler = _genelRepo.ListeVeri("Turler", "Tur_id", "Tur_ad");
+            var turler = _genelRepo.ListeVeri("KitapTurleri", "Tur_id", "TurAdi");
             return Ok(turler);
         }
 
         [HttpGet("yayinEvleri")]
         public IActionResult GetYayinEvleri()
         {
-            var yayinEvleri = _genelRepo.ListeVeri("YayinEvleri", "YayinEvi_id", "YayinEvi_ad");
+            var yayinEvleri = _genelRepo.ListeVeri("YayinEvleri", "Yayin_evi_id", "Yayin_evi_adi");
             return Ok(yayinEvleri);
         }
 
