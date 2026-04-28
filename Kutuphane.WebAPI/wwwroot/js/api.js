@@ -1,7 +1,4 @@
-// API bağlantı katmanı — backend entegrasyonu için
 
-
-// API nesnesi, backend ile iletişim kurmak için kullanılacak fonksiyonları içerir
 const API = {
     async istatistikGetir() {
 
@@ -17,16 +14,15 @@ const API = {
         }
     },
 
-    // api.js içindeki kitaplariGetir fonksiyonunu bununla güncelle
+    
     async kitaplariGetir(page = 1) {
         try {
-            // Backend'in pagination destekleyip desteklemediğine göre URL değişebilir
-            // Ama şimdilik en azından parametre göndermeyi hazır edelim
+            
             const response = await fetch(`/api/GenelBakis/tum-kitaplar?page=${page}`);
             if (!response.ok) throw new Error('Kitaplar alınamadı');
 
             const data = await response.json();
-            console.log("API'den Gelen Veri:", data); // Verinin yapısını görmemizi sağlar
+            console.log("API'den Gelen Veri:", data); 
             return data;
         } catch (error) {
             console.error('API Hatası:', error);

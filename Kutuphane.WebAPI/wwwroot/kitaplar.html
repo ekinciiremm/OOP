@@ -219,7 +219,7 @@ body { background: #f1f5f9; }
         async function kitaplariYukle() {
             try {
                 const response = await API.kitaplariGetir();
-                // Eğer API'den sayfalama verisi geliyorsa (örneğin response.data içindeyse) onu al, yoksa direkt response'u al
+                
                 const kitaplar = response.items || response.data || response;
 
                 const tbody = document.getElementById('books-tbody');
@@ -233,7 +233,7 @@ body { background: #f1f5f9; }
                 }
 
                 kitaplar.forEach(kitap => {
-                    // Veri eksik gelirse JS çökmesin (Null check)
+                   
                     const id = kitap.id || 0;
                     const ad = kitap.ad || 'Adsız Kitap';
                     const yazar = kitap.yazar || 'Bilinmiyor';
@@ -302,17 +302,17 @@ body { background: #f1f5f9; }
             console.log("Gelen İstatistik:", stats);
             if (stats) {
                 document.getElementById('book-total-count').textContent = stats.tumKitapToplam;
-                document.getElementById('book-avail-count').textContent = stats.musaitKopya;  // boşluk YOK
+                document.getElementById('book-avail-count').textContent = stats.musaitKopya; 
                 document.getElementById('book-borrowed-count').textContent = stats.aktifOdunc;
                 document.getElementById('book-category-count').textContent = stats.kategoriSayisi;
             }
         });
 
-        // DOMContentLoaded içine veya scriptin uygun bir yerine:
+       
 document.addEventListener('click', async (e) => {
-    // Eğer tıklanan eleman bir sayfa butonuysa (Genelde app.js içindeki mantığa göre)
+    
     if (e.target.closest('#book-pagination button')) {
-        const pageNum = e.target.innerText; // Tıklanan butonun üzerindeki sayı (1, 2, 3...)
+        const pageNum = e.target.innerText; 
         if (!isNaN(pageNum)) {
             console.log(pageNum + ". sayfaya geçiliyor...");
             await kitaplariYukle(pageNum); 
@@ -321,7 +321,7 @@ document.addEventListener('click', async (e) => {
 });
 
         async function modalListeleriniDoldur() {
-            // Üç listeyi de paralel çekelim
+           
             const [yazarlar, turler, yayinevleri] = await Promise.all([
                 API.yazarlariGetir(),
                 API.turleriGetir(),
@@ -351,7 +351,7 @@ document.addEventListener('click', async (e) => {
         }
 
         document.getElementById('book-save-btn').addEventListener('click', async () => {
-            // Objeyi senin DTO'na (Ad, ISBN, Stok, YayinEviId, TurId, YazarId) göre hazırlıyoruz
+            
             const yeniKitap = {
                 ad: document.getElementById('book-title').value,
                 isbn: document.getElementById('book-isbn').value,
@@ -376,7 +376,7 @@ document.addEventListener('click', async (e) => {
             }
         });
 
-        // window. diyerek bu fonksiyonu tüm sayfalarda 'ölümsüz' yapıyoruz
+        
         window.silmeTetikle = function (id) {
             const mesaj = "Bu kitabı silmek istediğinize emin misiniz?";
 
