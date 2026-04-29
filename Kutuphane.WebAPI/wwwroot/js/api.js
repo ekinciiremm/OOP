@@ -1,4 +1,3 @@
-
 const API = {
     async istatistikGetir() {
 
@@ -14,15 +13,15 @@ const API = {
         }
     },
 
-    
+
     async kitaplariGetir(page = 1) {
         try {
-            
+
             const response = await fetch(`/api/GenelBakis/tum-kitaplar?page=${page}`);
             if (!response.ok) throw new Error('Kitaplar alınamadı');
 
             const data = await response.json();
-            console.log("API'den Gelen Veri:", data); 
+            console.log("API'den Gelen Veri:", data);
             return data;
         } catch (error) {
             console.error('API Hatası:', error);
@@ -35,7 +34,7 @@ const API = {
 
     async yazarlariGetir() {
         try {
-            const response = await fetch('/api/KitapDuzenle/yazarlar'); 
+            const response = await fetch('/api/KitapDuzenle/yazarlar');
             if (!response.ok) throw new Error('Yazarlar alınamadı');
             return await response.json();
         } catch (error) {
@@ -45,7 +44,7 @@ const API = {
     },
 
 
-   
+
     async turleriGetir() {
         try {
             const response = await fetch('/api/KitapDuzenle/turler');
@@ -90,7 +89,9 @@ const API = {
     },
 
     async kitapSil(id) {
-        if (!confirm("Bu kitabı silmek istediğinize emin misiniz? Bu işlem geri alınamaz!")) {
+        console.log("API'ye giden ID:", id); 
+        if (!id || id === 0) {
+            console.error("Hata: Geçersiz ID gönderilmeye çalışıldı!");
             return false;
         }
         try {
@@ -99,11 +100,49 @@ const API = {
             });
             return response.ok;
         } catch (error) {
-            console.error("Kitap silinirken hata oluştu:", error);
+            console.error("Silme hatası:", error);
             return false;
         }
-    }
+    },
 
+
+
+  
+    async tumUyeleriGetir() {
+        try {
+            const response = await fetch('/api/Uye/tum-uyeler');
+            if (!response.ok) throw new Error('Üyeler çekilemedi');
+            return await response.json();
+        } catch (error) {
+            console.error("Hata:", error);
+            return [];
+        }
+    },
+
+
+    async uyeEkle(uyeVerisi) {
+        try {
+            const response = await fetch('/api/Uye/uye-ekle', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(uyeVerisi)
+            });
+            if (response.ok) {
+
+                return { success: true };
+            } else {
+
+                const errorText = await response.text();
+                return { success: false, message: errorText };
+            }
+
+        } catch (error) {
+            console.error("Üye ekleme API hatası:", error);
+            return { success: false, message: "Sunucuya bağlanılamadı." };
+        }
+    }
 
 
 };

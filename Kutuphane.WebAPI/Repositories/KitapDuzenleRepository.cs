@@ -134,7 +134,7 @@ namespace Kutuphane.WebAPI.Repositories
         // Verilen ID'ye sahip kitabı siler
         public bool KitapSil(int id)
         {
-            string sorgu = "delete from Kitaplar where Kitap_id = @id";
+            string sorgu = "update Kitaplar set SilindiMi = 1 WHERE Kitap_id = @id";
             var parametreler = new List<SqlParameter>
             {
                 new SqlParameter("@id", id)

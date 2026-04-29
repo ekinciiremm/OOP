@@ -69,7 +69,7 @@ namespace Kutuphane.WebAPI.Repositories
         }
         public int TumToplamKitap()
         {
-            int tumToplamKitap = ExecuteCount("select sum(Stok_adedi) from Kitaplar");
+            int tumToplamKitap = ExecuteCount("select sum(Stok_adedi) from Kitaplar WHERE SilindiMi = 0");
             return tumToplamKitap;
         }
 
@@ -89,7 +89,7 @@ namespace Kutuphane.WebAPI.Repositories
 
         public int ToplamKitap()
         {
-            int toplamKitap = ExecuteCount("select count(*) from Kitaplar");
+            int toplamKitap = ExecuteCount("select count(*) from Kitaplar WHERE SilindiMi = 0");
             return toplamKitap;
         }
 
@@ -236,12 +236,12 @@ namespace Kutuphane.WebAPI.Repositories
         public List<TumKitaplarDto> TumKitaplar()
         {
             var tumKitaplar = new List<TumKitaplarDto>();
-            string query = "select K.Kitap_adi, K.ISBN, K.Stok_adedi, K.Konum, Ye.Yayin_evi_adi, KT.TurAdi, " +
-"(Y.Yazar_ad + ' ' + Y.Yazar_soyad) AS Yazar " +
-"from Kitaplar K " +
-"join Yazarlar Y on K.Yazar_id = Y.Yazar_id " +
-"join KitapTurleri KT on K.Tur_id = KT.Tur_id " +
-"join YayinEvleri Ye on K.Yayin_evi_id = Ye.Yayin_evi_id";
+            string query = "select K.Kitap_id, K.Kitap_adi, K.ISBN, K.Stok_adedi, K.Konum, Ye.Yayin_evi_adi, KT.TurAdi, " +
+                       "(Y.Yazar_ad + ' ' + Y.Yazar_soyad) AS Yazar " +
+                       "from Kitaplar K " +
+                       "join Yazarlar Y on K.Yazar_id = Y.Yazar_id " +
+                       "join KitapTurleri KT on K.Tur_id = KT.Tur_id " +
+                       "join YayinEvleri Ye on K.Yayin_evi_id = Ye.Yayin_evi_id WHERE K.SilindiMi = 0";
 
             try
             {
@@ -251,6 +251,7 @@ namespace Kutuphane.WebAPI.Repositories
                     {
                         var kitap = new TumKitaplarDto
                         {
+                            Id = Convert.ToInt32(reader["Kitap_id"]),
                             Ad = reader["Kitap_adi"].ToString(),
                             ISBN = reader["ISBN"].ToString(),
                             Stok = Convert.ToInt32(reader["Stok_adedi"]),

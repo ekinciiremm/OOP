@@ -3,8 +3,10 @@
     public class UyeIslemleriDTO
     {
         // Kimlik Bilgileri
+        public int Id { get; set; }
         public string Ad { get; set; }
         public string Soyad { get; set; }
+
         public string TcNo { get; set; }
         public string BarkodNo { get; set; }
 
@@ -13,12 +15,7 @@
         public string Telefon { get; set; }
         public string Adres { get; set; }
         public DateTime KayitTarihi { get; set; }
-        public DateTime DogumTarihi { get; set; }
-
-        // Üyelik Bilgileri
-        public int OduncLimit { get; set; } = 5;
-        public decimal GecikmeCezasi { get; set; }
-        public bool KaraListedeMi { get; set; }
+      
         public bool Durum { get; set; }
     }
 }

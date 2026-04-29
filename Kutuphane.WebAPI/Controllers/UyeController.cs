@@ -72,7 +72,7 @@ namespace Kutuphane.WebAPI.Controllers
             return Ok(uye);
         }
 
-        [HttpPut("guncelle/{id}")]
+        [HttpPut("uye-guncelle/{id}")]
         public IActionResult Guncelle(int id, UyeIslemleriDTO uye)
         {
             if (uye == null) return BadRequest("Üye bilgileri eksik.");
@@ -85,6 +85,13 @@ namespace Kutuphane.WebAPI.Controllers
             {
                 return StatusCode(500, "Üye güncellenirken bir hata oluştu.");
             }
+        }
+
+        [HttpPut("durum-guncelle/{id}")]
+        public IActionResult DurumGuncelle(int id, [FromBody] string durum)
+        {
+            _repo.UyeDurumGuncelle(id, durum);
+            return Ok("Durum güncellendi.");
         }
 
         [HttpGet("{id}/gecmis")]

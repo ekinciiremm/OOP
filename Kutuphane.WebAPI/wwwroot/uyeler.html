@@ -16,321 +16,523 @@ body { background: #f1f5f9; }
 </head>
 <body class="text-slate-800">
 
-<!-- SIDEBAR -->
-<aside id="sidebar" class="fixed left-0 top-0 h-screen w-64 z-50 bg-slate-900 flex flex-col overflow-y-auto"></aside>
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="fixed left-0 top-0 h-screen w-64 z-50 bg-slate-900 flex flex-col overflow-y-auto"></aside>
 
-<!-- TOPBAR -->
-<header class="fixed top-0 right-0 left-64 h-16 z-40 bg-white border-b border-slate-200 flex items-center justify-between px-6 shadow-sm">
-  <div class="relative flex-1 max-w-sm">
-    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">search</span>
-    <input id="member-search" type="text" placeholder="Üye ara (İsim, TC, Kart No...)"
-      class="w-full bg-slate-100 rounded-xl py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:bg-white outline-none transition-all border border-transparent focus:border-indigo-200"/>
-  </div>
-  <div class="flex items-center gap-4 ml-4">
-    <button class="relative text-slate-500 hover:text-indigo-600 transition-colors">
-      <span class="material-symbols-outlined">notifications</span>
-      <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
-    </button>
-    <div class="flex items-center gap-2.5 border-l border-slate-200 pl-4">
-      <div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white text-xs font-bold">SY</div>
-      <div class="hidden sm:block">
-        <p class="text-xs font-bold text-slate-900 leading-none">Dr. Selim Yılmaz</p>
-        <p class="text-[10px] text-slate-400">Baş Kütüphaneci</p>
-      </div>
-    </div>
-  </div>
-</header>
-
-<!-- MAIN -->
-<main class="ml-64 pt-16 min-h-screen">
-  <div class="p-6 space-y-6">
-
-    <!-- Başlık -->
-    <div class="flex items-center justify-between">
-      <div>
-        <h2 class="text-2xl font-black text-slate-900">Üye Yönetimi</h2>
-        <p class="text-sm text-slate-500 mt-0.5">Kütüphane sistemine kayıtlı tüm aktif ve pasif üyeleri yönetin.</p>
-      </div>
-      <button data-open-member-modal
-        class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-semibold text-sm shadow-lg shadow-indigo-200 transition-all active:scale-95">
-        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1">person_add</span>
-        Yeni Üye Ekle
-      </button>
-    </div>
-
-    <!-- Stat Kartlar (ekrandaki tasarım) -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
-        <div class="flex items-start justify-between mb-3">
-          <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600">
-            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1">group</span>
-          </div>
-          <span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">+12%</span>
+    <!-- TOPBAR -->
+    <header class="fixed top-0 right-0 left-64 h-16 z-40 bg-white border-b border-slate-200 flex items-center justify-between px-6 shadow-sm">
+        <div class="relative flex-1 max-w-sm">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">search</span>
+            <input id="member-search" type="text" placeholder="Üye ara (İsim, TC, Kart No...)"
+                   class="w-full bg-slate-100 rounded-xl py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:bg-white outline-none transition-all border border-transparent focus:border-indigo-200" />
         </div>
-        <p class="text-2xl font-black text-slate-900" id="stat-total">—</p>
-        <p class="text-xs text-slate-500 font-medium mt-1">Toplam Üye</p>
-      </div>
-
-      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
-        <div class="flex items-start justify-between mb-3">
-          <div class="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center text-green-600">
-            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1">person_check</span>
-          </div>
-          <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">Bu Ay</span>
-        </div>
-        <p class="text-2xl font-black text-slate-900" id="stat-new">—</p>
-        <p class="text-xs text-slate-500 font-medium mt-1">Yeni Kayıtlar</p>
-      </div>
-
-      <div class="bg-white rounded-2xl p-5 shadow-sm border border-red-50 bg-red-50/40">
-        <div class="flex items-start justify-between mb-3">
-          <div class="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center text-red-600">
-            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1">warning</span>
-          </div>
-          <span class="text-[10px] font-bold text-red-600 bg-red-100 px-2 py-0.5 rounded-full">Kritik</span>
-        </div>
-        <p class="text-2xl font-black text-red-600" id="stat-overdue">—</p>
-        <p class="text-xs text-slate-500 font-medium mt-1">Gecikmiş İade</p>
-      </div>
-
-      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
-        <div class="flex items-start justify-between mb-3">
-          <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
-            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1">auto_stories</span>
-          </div>
-          <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">Aktif</span>
-        </div>
-        <p class="text-2xl font-black text-slate-900" id="stat-active">—</p>
-        <p class="text-xs text-slate-500 font-medium mt-1">Aktif Okuyucular</p>
-      </div>
-    </div>
-
-    <!-- Tablo Kartı -->
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-      <!-- Toolbar -->
-      <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-wrap gap-3">
-        <div class="flex items-center gap-2">
-          <button data-status-filter="all" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white transition-all">Tümü</button>
-          <button data-status-filter="Aktif" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-all">Aktif</button>
-          <button data-status-filter="Dondurulmuş" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-all">Dondurulmuş</button>
-          <button data-status-filter="Pasif" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-all">Pasif</button>
-        </div>
-        <button class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors">
-          <span class="material-symbols-outlined text-[16px]">download</span>Dışa Aktar
-        </button>
-      </div>
-
-      <!-- Tablo -->
-      <div class="overflow-x-auto">
-        <table class="w-full text-left">
-          <thead class="bg-slate-50 text-xs text-slate-500 uppercase tracking-wider">
-            <tr>
-              <th class="px-6 py-3.5 font-bold">Kart No</th>
-              <th class="px-6 py-3.5 font-bold">İsim Soyisim</th>
-              <th class="px-6 py-3.5 font-bold">TC Kimlik</th>
-              <th class="px-6 py-3.5 font-bold">İletişim</th>
-              <th class="px-6 py-3.5 font-bold">Kayıt Tarihi</th>
-              <th class="px-6 py-3.5 font-bold">Durum</th>
-              <th class="px-6 py-3.5 font-bold text-right">İşlemler</th>
-            </tr>
-          </thead>
-          <tbody id="members-tbody" class="divide-y divide-slate-100">
-            <tr><td colspan="7" class="px-6 py-12 text-center text-slate-400 text-sm">
-              <div class="flex flex-col items-center gap-2">
-                <span class="material-symbols-outlined text-3xl text-slate-300">group</span>
-                Yükleniyor...
-              </div>
-            </td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Sayfalama -->
-      <div class="px-6 py-4 border-t border-slate-100 flex items-center justify-between text-sm text-slate-500 flex-wrap gap-3">
-        <p id="member-count-text" class="text-xs">—</p>
-        <div class="flex items-center gap-1.5" id="member-pagination"></div>
-      </div>
-    </div>
-
-    <!-- Alt Bölüm: Kimlik Kartı + Bilgi -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <!-- Dijital Kimlik Kartı -->
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
-        <h4 class="font-bold text-slate-900 mb-4 text-sm">Dijital Üyelik Kartı</h4>
-        <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br from-indigo-900 via-indigo-800 to-slate-900 p-5 text-white shadow-xl">
-          <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-8 translate-x-8"></div>
-          <div class="absolute bottom-0 left-0 w-24 h-24 bg-indigo-600/20 rounded-full translate-y-6 -translate-x-6"></div>
-          <div class="relative z-10">
-            <div class="flex justify-between items-start mb-6">
-              <div>
-                <p class="text-[9px] uppercase tracking-widest text-indigo-300 font-bold mb-1">Kütüphane Kimlik Kartı</p>
-                <p class="font-bold text-sm">Kütüphane Zekâsı</p>
-              </div>
-              <span class="material-symbols-outlined text-indigo-400" style="font-variation-settings:'FILL' 1">smart_card_reader</span>
+        <div class="flex items-center gap-4 ml-4">
+            <button class="relative text-slate-500 hover:text-indigo-600 transition-colors">
+                <span class="material-symbols-outlined">notifications</span>
+                <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+            <div class="flex items-center gap-2.5 border-l border-slate-200 pl-4">
+                <div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white text-xs font-bold">SY</div>
+                <div class="hidden sm:block">
+                    <p class="text-xs font-bold text-slate-900 leading-none">Dr. Selim Yılmaz</p>
+                    <p class="text-[10px] text-slate-400">Baş Kütüphaneci</p>
+                </div>
             </div>
-            <div class="flex items-end justify-between">
-              <div class="flex items-center gap-3">
-                <div class="w-12 h-12 rounded-xl bg-white/15 flex items-center justify-center font-bold text-lg">AY</div>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="ml-64 pt-16 min-h-screen">
+        <div class="p-6 space-y-6">
+
+            <!-- Başlık -->
+            <div class="flex items-center justify-between">
                 <div>
-                  <p class="font-bold text-sm">Ahmet Yılmaz</p>
-                  <p class="text-indigo-300 text-xs font-mono">LIB-4962</p>
+                    <h2 class="text-2xl font-black text-slate-900">Üye Yönetimi</h2>
+                    <p class="text-sm text-slate-500 mt-0.5">Kütüphane sistemine kayıtlı tüm aktif ve pasif üyeleri yönetin.</p>
                 </div>
-              </div>
-              <div class="bg-white rounded-lg p-1.5">
-                <svg width="36" height="36" viewBox="0 0 9 9" class="block">
-                  <rect x="0" y="0" width="3" height="3" fill="#000"/><rect x="1" y="1" width="1" height="1" fill="#fff"/>
-                  <rect x="6" y="0" width="3" height="3" fill="#000"/><rect x="7" y="1" width="1" height="1" fill="#fff"/>
-                  <rect x="0" y="6" width="3" height="3" fill="#000"/><rect x="1" y="7" width="1" height="1" fill="#fff"/>
-                  <rect x="4" y="0" width="1" height="1" fill="#000"/><rect x="3" y="1" width="1" height="1" fill="#000"/>
-                  <rect x="4" y="2" width="1" height="1" fill="#000"/><rect x="3" y="4" width="1" height="1" fill="#000"/>
-                  <rect x="5" y="3" width="1" height="2" fill="#000"/><rect x="4" y="5" width="2" height="1" fill="#000"/>
-                  <rect x="6" y="4" width="1" height="1" fill="#000"/><rect x="8" y="3" width="1" height="2" fill="#000"/>
-                  <rect x="6" y="6" width="1" height="3" fill="#000"/><rect x="8" y="6" width="1" height="1" fill="#000"/>
-                  <rect x="7" y="8" width="2" height="1" fill="#000"/>
-                </svg>
-              </div>
+                <button data-open-member-modal
+                        class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-semibold text-sm shadow-lg shadow-indigo-200 transition-all active:scale-95">
+                    <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1">person_add</span>
+                    Yeni Üye Ekle
+                </button>
             </div>
-          </div>
-        </div>
-        <p class="text-xs text-slate-400 mt-3 leading-relaxed">Tüm üyeler için mobil uyumlu dijital QR kartları oluşturun ve fiziksel kart maliyetlerini %80 azaltın.</p>
-        <button class="mt-3 w-full py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 text-xs font-bold rounded-xl transition-colors">
-          Hemen Aktifleştir
-        </button>
-      </div>
 
-      <!-- Akıllı Öneriler -->
-      <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-        <div class="flex items-start gap-4">
-          <div class="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-500 flex-shrink-0">
-            <span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1">auto_awesome</span>
-          </div>
-          <div class="flex-1">
-            <h4 class="font-bold text-slate-900 mb-2">Akıllı Öneriler</h4>
-            <p class="text-sm text-slate-600 mb-5 leading-relaxed">Üyelerin okuma geçmişine göre yapay zeka destekli kitap önerileri sunun. Üye memnuniyetini artırın ve kitap dolaşım hızını yükseltin.</p>
+            <!-- Stat Kartlar (ekrandaki tasarım) -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600">
+                            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1">group</span>
+                        </div>
+                        <span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">+12%</span>
+                    </div>
+                    <p class="text-2xl font-black text-slate-900" id="stat-total">—</p>
+                    <p class="text-xs text-slate-500 font-medium mt-1">Toplam Üye</p>
+                </div>
 
-            <div class="space-y-3">
-              <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
-                <div class="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center text-green-600">
-                  <span class="material-symbols-outlined text-[16px]">trending_up</span>
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center text-green-600">
+                            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1">person_check</span>
+                        </div>
+                        <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">Bu Ay</span>
+                    </div>
+                    <p class="text-2xl font-black text-slate-900" id="stat-new">—</p>
+                    <p class="text-xs text-slate-500 font-medium mt-1">Yeni Kayıtlar</p>
                 </div>
-                <div class="flex-1">
-                  <p class="text-xs font-bold text-slate-900">Bu Hafta En Çok Okunan</p>
-                  <p class="text-xs text-slate-500">Suç ve Ceza — 8 aktif ödünç</p>
+
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-red-50 bg-red-50/40">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center text-red-600">
+                            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1">warning</span>
+                        </div>
+                        <span class="text-[10px] font-bold text-red-600 bg-red-100 px-2 py-0.5 rounded-full">Kritik</span>
+                    </div>
+                    <p class="text-2xl font-black text-red-600" id="stat-overdue">—</p>
+                    <p class="text-xs text-slate-500 font-medium mt-1">Gecikmiş İade</p>
                 </div>
-                <a href="kitaplar.html" class="text-xs text-indigo-600 font-semibold hover:underline">Görüntüle →</a>
-              </div>
-              <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
-                <div class="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center text-amber-600">
-                  <span class="material-symbols-outlined text-[16px]">schedule</span>
+
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1">auto_stories</span>
+                        </div>
+                        <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">Aktif</span>
+                    </div>
+                    <p class="text-2xl font-black text-slate-900" id="stat-active">—</p>
+                    <p class="text-xs text-slate-500 font-medium mt-1">Aktif Okuyucular</p>
                 </div>
-                <div class="flex-1">
-                  <p class="text-xs font-bold text-slate-900">Yaklaşan Teslim Tarihleri</p>
-                  <p class="text-xs text-slate-500">Bu hafta 4 kitap iade edilecek</p>
-                </div>
-                <a href="odunc.html" class="text-xs text-indigo-600 font-semibold hover:underline">Görüntüle →</a>
-              </div>
-              <div class="flex items-center gap-3 p-3 bg-red-50 rounded-xl">
-                <div class="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center text-red-600">
-                  <span class="material-symbols-outlined text-[16px]">warning</span>
-                </div>
-                <div class="flex-1">
-                  <p class="text-xs font-bold text-slate-900">Gecikmiş Üye Uyarısı</p>
-                  <p class="text-xs text-slate-500">2 üyenin iadesi çok gecikmiş</p>
-                </div>
-                <a href="odunc.html" class="text-xs text-red-600 font-semibold hover:underline">Görüntüle →</a>
-              </div>
             </div>
-          </div>
+
+            <!-- Tablo Kartı -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <!-- Toolbar -->
+                <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-wrap gap-3">
+                    <div class="flex items-center gap-2">
+                        <button data-status-filter="all" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white transition-all">Tümü</button>
+                        <button data-status-filter="Aktif" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-all">Aktif</button>
+                        <button data-status-filter="Dondurulmuş" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-all">Dondurulmuş</button>
+                        <button data-status-filter="Pasif" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-all">Pasif</button>
+                    </div>
+                    <button class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors">
+                        <span class="material-symbols-outlined text-[16px]">download</span>Dışa Aktar
+                    </button>
+                </div>
+
+                <!-- Tablo -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50 text-xs text-slate-500 uppercase tracking-wider">
+                            <tr>
+                                <th class="px-6 py-3.5 font-bold">Kart No</th>
+                                <th class="px-6 py-3.5 font-bold">İsim Soyisim</th>
+                                <th class="px-6 py-3.5 font-bold">TC Kimlik</th>
+                                <th class="px-6 py-3.5 font-bold">İletişim</th>
+                                <th class="px-6 py-3.5 font-bold">Kayıt Tarihi</th>
+                                <th class="px-6 py-3.5 font-bold">Durum</th>
+                                <th class="px-6 py-3.5 font-bold text-right">İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody id="members-tbody" class="divide-y divide-slate-100">
+                            <tr>
+                                <td colspan="7" class="px-6 py-12 text-center text-slate-400 text-sm">
+                                    <div class="flex flex-col items-center gap-2">
+                                        <span class="material-symbols-outlined text-3xl text-slate-300">group</span>
+                                        Yükleniyor...
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Sayfalama -->
+                <div class="px-6 py-4 border-t border-slate-100 flex items-center justify-between text-sm text-slate-500 flex-wrap gap-3">
+                    <p id="member-count-text" class="text-xs">—</p>
+                    <div class="flex items-center gap-1.5" id="member-pagination"></div>
+                </div>
+            </div>
+
+            <!-- Alt Bölüm: Kimlik Kartı + Bilgi -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Dijital Kimlik Kartı -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+                    <h4 class="font-bold text-slate-900 mb-4 text-sm">Dijital Üyelik Kartı</h4>
+                    <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br from-indigo-900 via-indigo-800 to-slate-900 p-5 text-white shadow-xl">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-8 translate-x-8"></div>
+                        <div class="absolute bottom-0 left-0 w-24 h-24 bg-indigo-600/20 rounded-full translate-y-6 -translate-x-6"></div>
+                        <div class="relative z-10">
+                            <div class="flex justify-between items-start mb-6">
+                                <div>
+                                    <p class="text-[9px] uppercase tracking-widest text-indigo-300 font-bold mb-1">Kütüphane Kimlik Kartı</p>
+                                    <p class="font-bold text-sm">Kütüphane Zekâsı</p>
+                                </div>
+                                <span class="material-symbols-outlined text-indigo-400" style="font-variation-settings:'FILL' 1">smart_card_reader</span>
+                            </div>
+                            <div class="flex items-end justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-xl bg-white/15 flex items-center justify-center font-bold text-lg">AY</div>
+                                    <div>
+                                        <p class="font-bold text-sm">Ahmet Yılmaz</p>
+                                        <p class="text-indigo-300 text-xs font-mono">LIB-4962</p>
+                                    </div>
+                                </div>
+                                <div class="bg-white rounded-lg p-1.5">
+                                    <svg width="36" height="36" viewBox="0 0 9 9" class="block">
+                                        <rect x="0" y="0" width="3" height="3" fill="#000" />
+                                        <rect x="1" y="1" width="1" height="1" fill="#fff" />
+                                        <rect x="6" y="0" width="3" height="3" fill="#000" />
+                                        <rect x="7" y="1" width="1" height="1" fill="#fff" />
+                                        <rect x="0" y="6" width="3" height="3" fill="#000" />
+                                        <rect x="1" y="7" width="1" height="1" fill="#fff" />
+                                        <rect x="4" y="0" width="1" height="1" fill="#000" />
+                                        <rect x="3" y="1" width="1" height="1" fill="#000" />
+                                        <rect x="4" y="2" width="1" height="1" fill="#000" />
+                                        <rect x="3" y="4" width="1" height="1" fill="#000" />
+                                        <rect x="5" y="3" width="1" height="2" fill="#000" />
+                                        <rect x="4" y="5" width="2" height="1" fill="#000" />
+                                        <rect x="6" y="4" width="1" height="1" fill="#000" />
+                                        <rect x="8" y="3" width="1" height="2" fill="#000" />
+                                        <rect x="6" y="6" width="1" height="3" fill="#000" />
+                                        <rect x="8" y="6" width="1" height="1" fill="#000" />
+                                        <rect x="7" y="8" width="2" height="1" fill="#000" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-3 leading-relaxed">Tüm üyeler için mobil uyumlu dijital QR kartları oluşturun ve fiziksel kart maliyetlerini %80 azaltın.</p>
+                    <button class="mt-3 w-full py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 text-xs font-bold rounded-xl transition-colors">
+                        Hemen Aktifleştir
+                    </button>
+                </div>
+
+                <!-- Akıllı Öneriler -->
+                <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-500 flex-shrink-0">
+                            <span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1">auto_awesome</span>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-slate-900 mb-2">Akıllı Öneriler</h4>
+                            <p class="text-sm text-slate-600 mb-5 leading-relaxed">Üyelerin okuma geçmişine göre yapay zeka destekli kitap önerileri sunun. Üye memnuniyetini artırın ve kitap dolaşım hızını yükseltin.</p>
+
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
+                                    <div class="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center text-green-600">
+                                        <span class="material-symbols-outlined text-[16px]">trending_up</span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-xs font-bold text-slate-900">Bu Hafta En Çok Okunan</p>
+                                        <p class="text-xs text-slate-500">Suç ve Ceza — 8 aktif ödünç</p>
+                                    </div>
+                                    <a href="kitaplar.html" class="text-xs text-indigo-600 font-semibold hover:underline">Görüntüle →</a>
+                                </div>
+                                <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
+                                    <div class="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center text-amber-600">
+                                        <span class="material-symbols-outlined text-[16px]">schedule</span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-xs font-bold text-slate-900">Yaklaşan Teslim Tarihleri</p>
+                                        <p class="text-xs text-slate-500">Bu hafta 4 kitap iade edilecek</p>
+                                    </div>
+                                    <a href="odunc.html" class="text-xs text-indigo-600 font-semibold hover:underline">Görüntüle →</a>
+                                </div>
+                                <div class="flex items-center gap-3 p-3 bg-red-50 rounded-xl">
+                                    <div class="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center text-red-600">
+                                        <span class="material-symbols-outlined text-[16px]">warning</span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-xs font-bold text-slate-900">Gecikmiş Üye Uyarısı</p>
+                                        <p class="text-xs text-slate-500">2 üyenin iadesi çok gecikmiş</p>
+                                    </div>
+                                    <a href="odunc.html" class="text-xs text-red-600 font-semibold hover:underline">Görüntüle →</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-      </div>
+    </main>
+
+    <!-- MODAL: Yeni Üye / Düzenle -->
+    <div id="member-modal" class="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden">
+            <!-- Modal Başlık -->
+            <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+                <div>
+                    <h3 id="member-modal-title" class="text-lg font-bold text-slate-900">Yeni Üye Kaydı</h3>
+                    <p class="text-xs text-slate-500 mt-0.5">Lütfen üye bilgilerini eksiksiz doldurunuz.</p>
+                </div>
+                <button data-close-member-modal class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-all">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <!-- Form -->
+            <div class="p-6 overflow-y-auto max-h-[70vh]">
+                <form id="member-form" class="grid grid-cols-2 gap-4">
+                    <div class="col-span-2 sm:col-span-1 space-y-1.5">
+                        <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Ad Soyad *</label>
+                        <input id="member-fullname" type="text" placeholder="Örn: Ahmet Yılmaz"
+                               class="w-full rounded-xl border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all" />
+                    </div>
+                    <div class="col-span-2 sm:col-span-1 space-y-1.5">
+                        <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">TC Kimlik No</label>
+                        <input id="member-tc" type="text" placeholder="11 haneli numara" maxlength="11"
+                               class="w-full rounded-xl border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all font-mono" />
+                    </div>
+                    <div class="col-span-2 sm:col-span-1 space-y-1.5">
+                        <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Telefon</label>
+                        <input id="member-phone" type="tel" placeholder="05XX XXX XX XX"
+                               class="w-full rounded-xl border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all" />
+                    </div>
+                    <div class="col-span-2 sm:col-span-1 space-y-1.5">
+                        <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">E-posta</label>
+                        <input id="member-email" type="email" placeholder="ornek@mail.com"
+                               class="w-full rounded-xl border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all" />
+                    </div>
+                    <div class="col-span-2 space-y-1.5">
+                        <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Adres</label>
+                        <textarea id="member-address" rows="2" placeholder="Mahalle, Sokak, No, İlçe/İl"
+                                  class="w-full rounded-xl border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all resize-none"></textarea>
+                    </div>
+                    
+                    <div class="col-span-2 sm:col-span-1 space-y-1.5">
+                        <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Durum</label>
+                        <select id="member-status"
+                                class="w-full rounded-xl border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all bg-white">
+                            <option value="Aktif">Aktif</option>
+                            <option value="Pasif">Pasif</option>
+                            <option value="Dondurulmuş">Dondurulmuş</option>
+                        </select>
+                    </div>
+                    <div class="col-span-2 sm:col-span-1 space-y-1.5">
+                        <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Kayıt Tarihi</label>
+                        <input id="member-joindate" type="date"
+                               class="w-full rounded-xl border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all" />
+                    </div>
+                    <div class="col-span-2 sm:col-span-1 space-y-1.5">
+                        <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Kart Numarası</label>
+                        <input id="member-cardno" type="text" disabled
+                               class="w-full rounded-xl border border-slate-100 bg-slate-50 p-3 text-sm text-slate-400 font-mono font-bold cursor-not-allowed" />
+                    </div>
+                </form>
+            </div>
+
+            <!-- Alt Butonlar -->
+            <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-3">
+                <button data-close-member-modal
+                        class="px-5 py-2.5 text-sm font-semibold text-slate-600 hover:text-slate-800 hover:bg-slate-200 rounded-xl transition-all">
+                    İptal
+                </button>
+                <button onclick="yeniUyeKaydet()" id="member-save-btn"
+                        class="px-6 py-2.5 text-sm font-bold bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-lg shadow-indigo-200 transition-all active:scale-95">
+                    Üyeyi Kaydet
+                </button>
+            </div>
+        </div>
     </div>
 
-  </div>
-</main>
+    <script src="js/app.js"></script>
+    <script src="js/api.js"></script>
+    <script>
 
-<!-- MODAL: Yeni Üye / Düzenle -->
-<div id="member-modal" class="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
-  <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden">
-    <!-- Modal Başlık -->
-    <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
-      <div>
-        <h3 id="member-modal-title" class="text-lg font-bold text-slate-900">Yeni Üye Kaydı</h3>
-        <p class="text-xs text-slate-500 mt-0.5">Lütfen üye bilgilerini eksiksiz doldurunuz.</p>
-      </div>
-      <button data-close-member-modal class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-all">
-        <span class="material-symbols-outlined">close</span>
-      </button>
-    </div>
 
-    <!-- Form -->
-    <div class="p-6 overflow-y-auto max-h-[70vh]">
-      <form id="member-form" class="grid grid-cols-2 gap-4">
-        <div class="col-span-2 sm:col-span-1 space-y-1.5">
-          <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Ad Soyad *</label>
-          <input id="member-fullname" type="text" placeholder="Örn: Ahmet Yılmaz"
-            class="w-full rounded-xl border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all"/>
-        </div>
-        <div class="col-span-2 sm:col-span-1 space-y-1.5">
-          <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">TC Kimlik No</label>
-          <input id="member-tc" type="text" placeholder="11 haneli numara" maxlength="11"
-            class="w-full rounded-xl border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all font-mono"/>
-        </div>
-        <div class="col-span-2 sm:col-span-1 space-y-1.5">
-          <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Telefon</label>
-          <input id="member-phone" type="tel" placeholder="05XX XXX XX XX"
-            class="w-full rounded-xl border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all"/>
-        </div>
-        <div class="col-span-2 sm:col-span-1 space-y-1.5">
-          <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">E-posta</label>
-          <input id="member-email" type="email" placeholder="ornek@mail.com"
-            class="w-full rounded-xl border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all"/>
-        </div>
-        <div class="col-span-2 space-y-1.5">
-          <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Adres</label>
-          <textarea id="member-address" rows="2" placeholder="Mahalle, Sokak, No, İlçe/İl"
-            class="w-full rounded-xl border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all resize-none"></textarea>
-        </div>
-        <div class="col-span-2 sm:col-span-1 space-y-1.5">
-          <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Meslek</label>
-          <input id="member-occupation" type="text" placeholder="Öğrenci, Öğretmen vb."
-            class="w-full rounded-xl border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all"/>
-        </div>
-        <div class="col-span-2 sm:col-span-1 space-y-1.5">
-          <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Durum</label>
-          <select id="member-status"
-            class="w-full rounded-xl border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all bg-white">
-            <option value="Aktif">Aktif</option>
-            <option value="Pasif">Pasif</option>
-            <option value="Dondurulmuş">Dondurulmuş</option>
-          </select>
-        </div>
-        <div class="col-span-2 sm:col-span-1 space-y-1.5">
-          <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Kayıt Tarihi</label>
-          <input id="member-joindate" type="date"
-            class="w-full rounded-xl border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all"/>
-        </div>
-        <div class="col-span-2 sm:col-span-1 space-y-1.5">
-          <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Kart Numarası</label>
-          <input id="member-cardno" type="text" disabled
-            class="w-full rounded-xl border border-slate-100 bg-slate-50 p-3 text-sm text-slate-400 font-mono font-bold cursor-not-allowed"/>
-        </div>
-      </form>
-    </div>
 
-    <!-- Alt Butonlar -->
-    <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-3">
-      <button data-close-member-modal
-        class="px-5 py-2.5 text-sm font-semibold text-slate-600 hover:text-slate-800 hover:bg-slate-200 rounded-xl transition-all">
-        İptal
-      </button>
-      <button id="member-save-btn"
-        class="px-6 py-2.5 text-sm font-bold bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-lg shadow-indigo-200 transition-all active:scale-95">
-        Üyeyi Kaydet
-      </button>
-    </div>
-  </div>
-</div>
+        // Tabloyu çizen ana fonksiyon
+        function tabloyuCiz(liste) {
+            const tbody = document.getElementById('members-tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
 
-<script src="js/app.js"></script>
+            liste.forEach(uye => {
+                const ad = uye.ad || uye.Ad || "";
+                const soyad = uye.soyad || uye.Soyad || "";
+                const basHarfler = `${ad[0] || ''}${soyad[0] || ''}`.toUpperCase();
+
+                const tarihRaw = uye.kayitTarihi || uye.KayitTarihi;
+                const formatliTarih = tarihRaw ? new Date(tarihRaw).toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric' }) : "—";
+
+                tbody.innerHTML += `
+            <tr class="border-b hover:bg-slate-50 transition text-sm">
+                <td class="px-6 py-4 font-mono text-indigo-600 font-bold">${uye.barkodNo || uye.BarkodNo || '—'}</td>
+                <td class="px-6 py-4 flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-[10px] font-bold">
+                        ${basHarfler}
+                    </div>
+                    <div>
+                        <div class="font-bold text-slate-900">${ad} ${soyad}</div>
+                        <div class="text-[11px] text-slate-500">Kütüphane Üyesi</div>
+                    </div>
+                </td>
+                <td class="px-6 py-4 text-slate-500 font-mono text-[11px]">${uye.tcNo || uye.TcNo || '—'}</td>
+                <td class="px-6 py-4 text-[11px]">
+                    <div class="text-slate-700">${uye.telefon || uye.Telefon || '—'}</div>
+                    <div class="text-slate-400 italic">${uye.eposta || uye.Eposta || '—'}</div>
+                </td>
+                <td class="px-6 py-4 text-slate-500 text-xs">${formatliTarih}</td>
+               
+<td class="px-6 py-4">
+    <span class="px-2 py-1 rounded-full text-[10px] font-bold uppercase ${uye.durum ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}">
+        ${uye.durum ? 'AKTİF' : 'PASİF'}
+    </span>
+</td>
+                <td class="px-6 py-4 text-right">
+                    <button onclick="uyeSilIslemi(${uye.id || uye.Id})" class="p-1 text-slate-400 hover:text-red-500 transition">
+                        <span class="material-symbols-outlined text-[18px]">delete</span>
+                    </button>
+                </td>
+            </tr>`;
+            });
+        }
+
+        // API'den gelen uye listesiyle istatistik kartlarini gunceller
+        function istatistikleriGuncelle(uyeler) {
+            const el = (id) => document.getElementById(id);
+
+            const toplam = uyeler.length;
+            const aktif = uyeler.filter(u => u.durum === true).length;
+
+            const birAyOnce = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+            const yeniUye = uyeler.filter(u => {
+                const tarih = u.kayitTarihi || u.KayitTarihi;
+                return tarih && new Date(tarih) > birAyOnce;
+            }).length;
+
+            if (el('stat-total')) el('stat-total').textContent = toplam.toLocaleString('tr-TR');
+            if (el('stat-active')) el('stat-active').textContent = aktif.toLocaleString('tr-TR');
+            if (el('stat-new')) el('stat-new').textContent = yeniUye;
+        }
+
+        // Üyeleri API'den çeken fonksiyon
+        async function uyeleriYukle() {
+            const uyeler = await API.tumUyeleriGetir();
+            tabloyuCiz(uyeler);
+            istatistikleriGuncelle(uyeler);
+        }
+
+        // Filtreleme Fonksiyonu 
+        async function uyeleriFiltrele(durum) {
+            const uyeler = await API.tumUyeleriGetir();
+            let filtrelenmis = uyeler;
+
+            if (durum === 'Aktif') {
+                filtrelenmis = uyeler.filter(u => u.durum === true);
+            } else if (durum === 'Pasif') {
+                filtrelenmis = uyeler.filter(u => u.durum === false);
+            }
+
+            tabloyuCiz(filtrelenmis);
+        }
+
+
+        async function yeniUyeKaydet() {
+            // 1. Form Elemanlarını Seçiyoruz
+            const fullNameInput = document.getElementById('member-fullname');
+            const tcInput = document.getElementById('member-tc');
+            const emailInput = document.getElementById('member-email');
+            const phoneInput = document.getElementById('member-phone');
+            const addressInput = document.getElementById('member-address');
+            const cardNoInput = document.getElementById('member-cardno');
+
+            const fullName = fullNameInput.value.trim();
+
+            // 2. Temel Doğrulama (Validation)
+            if (!fullName) {
+                alert("Lütfen üye adını ve soyadını giriniz!");
+                fullNameInput.focus();
+                return;
+            }
+
+            // 3. İsim ve Soyisim Ayırma 
+            let ad = "";
+            let soyad = "";
+            const parts = fullName.split(/\s+/); 
+
+            if (parts.length > 1) {
+                soyad = parts.pop(); // Son kelime soyad olur
+                ad = parts.join(' '); // Geri kalan her şey (ikinci isimler dahil) ad olur
+            } else {
+                ad = fullName;
+                soyad = "-"; // Soyadı yoksa Backend patlamasın diye - koyuyoruz
+            }
+
+            // 4. Veri Paketini Hazırlama 
+            const yeniUye = {
+                ad: ad,
+                soyad: soyad,
+                tcNo: tcInput.value.trim() || null,
+                barkodNo: cardNoInput.value.trim() || ("LIB-" + Math.floor(1000 + Math.random() * 9000)),
+                eposta: emailInput.value.trim() || null,
+                telefon: phoneInput.value.trim() || null,
+                adres: addressInput.value.trim() || null,
+                durum: true // Yeni üyeler varsayılan olarak aktif
+            };
+
+            console.log("🚀 Backend'e giden veri:", yeniUye);
+
+            // 5. API'ye Gönderme İşlemi
+            try {
+                const sonuc = await API.uyeEkle(yeniUye);
+
+                if (sonuc.success) {
+                    alert(`🎉 ${ad} ${soyad} başarıyla kütüphaneye eklendi!`);
+
+                    // Formu temizle
+                    document.getElementById('member-form').reset();
+
+                    // Modalı Kapat
+                    const modal = document.getElementById('member-modal');
+                    if (modal) modal.classList.add('hidden');
+
+                    // Listeyi ve İstatistikleri Yenile
+                    if (typeof uyeleriYukle === 'function') await uyeleriYukle();
+                    
+
+                } else {
+                    console.error("❌ Backend Hatası:", sonuc.message);
+                    // Hata mesajı çok uzunsa veya JSON ise daha okunaklı göster
+                    alert("Kayıt başarısız: " + (sonuc.message.length > 100 ? "Lütfen veri formatını kontrol edin." : sonuc.message));
+                }
+            } catch (err) {
+                console.error("💥 Beklenmedik Hata:", err);
+                alert("Sistemde bir hata oluştu, lütfen konsolu kontrol edin.");
+            }
+        }
+
+
+        async function uyeSilIslemi(id) {
+            if (!confirm("Bu üyeyi pasif hale getirmek istediğinize emin misiniz?")) return;
+
+            try {
+                const response = await fetch(`/api/Uye/uye-sil/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    alert(data.mesaj); // "Üye başarıyla pasif duruma getirildi" mesajı
+                    await uyeleriYukle(); // Tabloyu ve istatistikleri yeniden yükler
+                } else {
+                    const errorData = await response.json();
+                    alert("Hata: " + (errorData.mesaj || "İşlem başarısız."));
+                }
+            } catch (error) {
+                console.error("Silme hatası:", error);
+                alert("Sunucuya bağlanılamadı.");
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            uyeleriYukle();
+
+
+        });
+    </script>
 </body>
 </html>

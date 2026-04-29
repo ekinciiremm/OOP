@@ -16,42 +16,35 @@ namespace Kutuphane.WebAPI.Repositories
         }
 
         // Yeni bir üye ekler
-        public bool UyeEkle(UyeIslemleriDTO uye) {
-
-            string query = "INSERT INTO Uyeler (Uye_adi, Uye_soyadi, Uye_eposta, Kayit_tarihi, Uye_tc_no, Uye_barkod_no, Uye_tel, Uye_adres, Uye_dogum_tarihi, Odunc_limit, Gecikme_cezasi_oran, Kara_liste_durumu, Uye_durumu) " +
-                "VALUES (@ad, @soyad, @ePosta, @kayitTrh, @tcNo, @barkodNo, @telNo, @adres, @dogumTrh, @oduncLimit, @gecikmeCezasi, @karaListeDrm, @uyeDrm)";
+        public bool UyeEkle(UyeIslemleriDTO uye)
+        {
+            // SADECE DTO'da olan alanları sorguya ekle
+            string query = "INSERT INTO Uyeler (Uye_adi, Uye_soyadi, Uye_eposta, Kayit_tarihi, Uye_tc_no, Uye_barkod_no, Uye_tel, Uye_adres, Uye_durumu) " +
+                           "VALUES (@ad, @soyad, @ePosta, @kayitTrh, @tcNo, @barkodNo, @telNo, @adres, @uyeDrm)";
 
             var parametreler = new List<SqlParameter>
     {
         new SqlParameter("@ad", uye.Ad),
         new SqlParameter("@soyad", uye.Soyad),
-        new SqlParameter("@ePosta", uye.Eposta),
+        new SqlParameter("@ePosta", (object)uye.Eposta ?? DBNull.Value),
         new SqlParameter("@kayitTrh", DateTime.Now),
-        new SqlParameter("@tcNo", uye.TcNo),
+        new SqlParameter("@tcNo", (object)uye.TcNo ?? DBNull.Value),
         new SqlParameter("@barkodNo", uye.BarkodNo),
-        new SqlParameter("@telNo", uye.Telefon),
-        new SqlParameter("@adres", uye.Adres),
-        new SqlParameter("@dogumTrh", uye.DogumTarihi),
-        new SqlParameter("@oduncLimit", uye.OduncLimit),
-        new SqlParameter("@gecikmeCezasi", uye.GecikmeCezasi),
-        new SqlParameter("@karaListeDrm", uye.KaraListedeMi),
+        new SqlParameter("@telNo", (object)uye.Telefon ?? DBNull.Value),
+        new SqlParameter("@adres", (object)uye.Adres ?? DBNull.Value),
         new SqlParameter("@uyeDrm", uye.Durum)
     };
 
             try
             {
-
                 _dbService.ExecuteCommand(query, parametreler);
-                _loggerService.LogInfo($"Üye başarıyla eklendi: {uye.Ad}");
                 return true;
             }
             catch (Exception ex)
             {
-                _loggerService.LogError($"Ekleme sırasında hata: {ex.Message}");
+                _loggerService.LogError($"Hata: {ex.Message}");
                 return false;
-
             }
-
         }
 
         // Üyeyi silmeden önce kontrol eder, eğer elinde teslim edilmemiş kitap varsa silme işlemini durdurur ve mesaj döner
@@ -138,8 +131,8 @@ namespace Kutuphane.WebAPI.Repositories
         public List<UyeIslemleriDTO> TumUyeleriGetir()
         {
             var liste = new List<UyeIslemleriDTO>();
-          
-            string query = "SELECT * FROM Uyeler ";
+            // WHERE SilindiMi = 0 (Eğer üyelere de soft delete yaptıysan eklemelisin)
+            string query = "SELECT * FROM Uyeler";
 
             using (var reader = _dbService.ExecuteReader(query, null))
             {
@@ -147,18 +140,33 @@ namespace Kutuphane.WebAPI.Repositories
                 {
                     liste.Add(new UyeIslemleriDTO
                     {
-                        
+                        Id = Convert.ToInt32(reader["Uye_id"]),
+                        BarkodNo = reader["Uye_barkod_no"]?.ToString() ?? "—",
                         Ad = reader["Uye_adi"].ToString(),
                         Soyad = reader["Uye_soyadi"].ToString(),
-                        Eposta = reader["Uye_eposta"].ToString(),
-                        Telefon = reader["Uye_tel"].ToString(),
-                     
-                        Durum = Convert.ToBoolean(reader["Uye_durumu"]),
-                   
+                        // TC No maskeleme işlemini frontend'de veya burada yapabilirsin
+                        TcNo = reader["Uye_tc_no"]?.ToString() ?? "",
+                        Telefon = reader["Uye_tel"]?.ToString() ?? "",
+                        Eposta = reader["Uye_eposta"]?.ToString() ?? "",
+                        KayitTarihi = Convert.ToDateTime(reader["Kayit_tarihi"]),
+                        Durum = Convert.ToBoolean(reader["Uye_durumu"])
                     });
                 }
             }
             return liste;
+        }
+
+        public void UyeDurumGuncelle(int id, string durum)
+        {
+            // "Aktif" → 1, "Pasif" → 0
+            int durumInt = durum == "Aktif" ? 1 : 0;
+            string query = "UPDATE Uyeler SET Uye_durumu = @durum WHERE Uye_id = @id";
+            var p = new List<SqlParameter>
+    {
+        new SqlParameter("@durum", durumInt),
+        new SqlParameter("@id", id)
+    };
+            _dbService.ExecuteCommand(query, p);
         }
 
 
@@ -173,18 +181,19 @@ namespace Kutuphane.WebAPI.Repositories
                 if (reader.Read())
                 {
                     return new UyeIslemleriDTO
+
                     {
+                       
                         Ad = reader["Uye_adi"].ToString(),
-                        Soyad = reader["Uye_soyadi"].ToString(),
+                       Soyad = reader["Uye_soyadi"].ToString(),
                         Eposta = reader["Uye_eposta"].ToString(),
                         TcNo = reader["Uye_tc_no"].ToString(),
                         BarkodNo = reader["Uye_barkod_no"].ToString(),
                         Telefon = reader["Uye_tel"].ToString(),
                         Adres = reader["Uye_adres"].ToString(),
-                        DogumTarihi = Convert.ToDateTime(reader["Uye_dogum_tarihi"]),
-                        OduncLimit = Convert.ToInt32(reader["Odunc_limit"]),
-                        GecikmeCezasi = Convert.ToDecimal(reader["Gecikme_cezasi_oran"]),
-                        KaraListedeMi = Convert.ToBoolean(reader["Kara_liste_durumu"]),
+                        
+                        
+                      
                         Durum = Convert.ToBoolean(reader["Uye_durumu"])
                     };
                 }
@@ -210,8 +219,7 @@ namespace Kutuphane.WebAPI.Repositories
         new SqlParameter("@tc", uye.TcNo),
         new SqlParameter("@tel", uye.Telefon),
         new SqlParameter("@adres", uye.Adres),
-        new SqlParameter("@limit", uye.OduncLimit),
-        new SqlParameter("@kara", uye.KaraListedeMi)
+        
     };
 
             try

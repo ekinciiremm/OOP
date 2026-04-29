@@ -44,48 +44,7 @@ const Store = {
 // BAŞLANGIÇ VERİSİ
 // ═══════════════════════════════════════════════════════
 function seedData() {
-  if (Store.get('seeded')) return;
-
-  Store.save('members', [
-    { id: 1001, cardNo: 'LIB-4962', name: 'Ahmet Yılmaz', surname: '', fullName: 'Ahmet Yılmaz', tc: '12345678901', phone: '0532 123 45 67', email: 'ahmet.yilmaz@email.com', address: 'Kadıköy, İstanbul', occupation: 'Üniversite Öğrencisi', joinDate: '2023-03-12', status: 'Aktif', booksRead: 28, activeLoans: 1 },
-    { id: 1002, cardNo: 'LIB-3821', name: 'Elif', surname: 'Kaya', fullName: 'Elif Kaya', tc: '98765432100', phone: '0505 987 65 43', email: 'elif.kaya@example.com', address: 'Beşiktaş, İstanbul', occupation: 'Öğretmen', joinDate: '2023-01-05', status: 'Aktif', booksRead: 54, activeLoans: 1 },
-    { id: 1003, cardNo: 'LIB-1029', name: 'Mehmet', surname: 'Can', fullName: 'Mehmet Can', tc: '45678901234', phone: '0544 333 22 11', email: 'm.can@mail.com', address: 'Üsküdar, İstanbul', occupation: 'Serbest Meslek', joinDate: '2022-11-15', status: 'Dondurulmuş', booksRead: 12, activeLoans: 0 },
-    { id: 1004, cardNo: 'LIB-5541', name: 'Selin', surname: 'Demir', fullName: 'Selin Demir', tc: '23456789012', phone: '0552 444 55 66', email: 'selin.d@uni.edu.tr', address: 'Şişli, İstanbul', occupation: 'Araştırmacı', joinDate: '2023-06-20', status: 'Aktif', booksRead: 87, activeLoans: 2 },
-    { id: 1005, cardNo: 'LIB-2210', name: 'Ali', surname: 'Haydar', fullName: 'Ali Haydar', tc: '34567890123', phone: '0533 111 22 33', email: 'ali.h@mail.com', address: 'Fatih, İstanbul', occupation: 'Mühendis', joinDate: '2023-08-01', status: 'Aktif', booksRead: 19, activeLoans: 1 },
-    { id: 1006, cardNo: 'LIB-7731', name: 'Zeynep', surname: 'Arslan', fullName: 'Zeynep Arslan', tc: '56789012345', phone: '0506 222 33 44', email: 'zeynep.a@mail.com', address: 'Maltepe, İstanbul', occupation: 'Doktor', joinDate: '2022-05-10', status: 'Aktif', booksRead: 143, activeLoans: 0 },
-  ]);
-
-  Store.save('books', [
-    { id: 2001, title: 'Saatleri Ayarlama Enstitüsü', author: 'Ahmet Hamdi Tanpınar', isbn: '978-975-244-101-1', category: 'Türk Edebiyatı', publisher: 'Dergâh', year: 2018, copies: 8, available: 5, location: 'A-12' },
-    { id: 2002, title: 'Suç ve Ceza', author: 'Fyodor Dostoyevski', isbn: '978-975-244-102-2', category: 'Klasik Edebiyat', publisher: 'İş Bankası', year: 2019, copies: 6, available: 4, location: 'B-07' },
-    { id: 2003, title: 'Sefiller', author: 'Victor Hugo', isbn: '978-975-244-103-3', category: 'Klasik Edebiyat', publisher: 'Türkiye İş Bankası', year: 2020, copies: 5, available: 2, location: 'B-08' },
-    { id: 2004, title: '1984', author: 'George Orwell', isbn: '978-975-244-104-4', category: 'Distopya', publisher: 'Can', year: 2021, copies: 10, available: 7, location: 'C-03' },
-    { id: 2005, title: 'Simyacı', author: 'Paulo Coelho', isbn: '978-975-244-105-5', category: 'Roman', publisher: 'Can', year: 2017, copies: 12, available: 9, location: 'C-14' },
-    { id: 2006, title: 'Kürk Mantolu Madonna', author: 'Sabahattin Ali', isbn: '978-975-244-106-6', category: 'Türk Edebiyatı', publisher: 'Yapı Kredi', year: 2016, copies: 9, available: 6, location: 'A-05' },
-    { id: 2007, title: 'Yapay Zeka: Modern Yaklaşım', author: 'Russell & Norvig', isbn: '978-975-244-107-7', category: 'Bilim & Teknoloji', publisher: 'Nobel', year: 2022, copies: 4, available: 3, location: 'D-01' },
-    { id: 2008, title: 'Küçük Prens', author: 'Antoine de Saint-Exupéry', isbn: '978-975-244-108-8', category: 'Çocuk Edebiyatı', publisher: 'Epsilon', year: 2020, copies: 15, available: 12, location: 'E-02' },
-    { id: 2009, title: 'Dune', author: 'Frank Herbert', isbn: '978-975-244-109-9', category: 'Bilim Kurgu', publisher: 'İthaki', year: 2021, copies: 7, available: 2, location: 'C-22' },
-    { id: 2010, title: 'İnce Memed', author: 'Yaşar Kemal', isbn: '978-975-244-110-0', category: 'Türk Edebiyatı', publisher: 'YKY', year: 2019, copies: 6, available: 5, location: 'A-18' },
-  ]);
-
-  Store.save('loans', [
-    { id: 3001, memberId: 1001, memberName: 'Ahmet Yılmaz', memberCard: 'LIB-4962', bookId: 2001, bookTitle: 'Saatleri Ayarlama Enstitüsü', bookAuthor: 'A.H. Tanpınar', loanDate: '2024-11-10', dueDate: '2024-11-24', returnDate: null, status: 'Aktif' },
-    { id: 3002, memberId: 1002, memberName: 'Elif Kaya', memberCard: 'LIB-3821', bookId: 2003, bookTitle: 'Sefiller', bookAuthor: 'Victor Hugo', loanDate: '2024-10-20', dueDate: '2024-11-03', returnDate: null, status: 'Gecikmiş' },
-    { id: 3003, memberId: 1004, memberName: 'Selin Demir', memberCard: 'LIB-5541', bookId: 2009, bookTitle: 'Dune', bookAuthor: 'Frank Herbert', loanDate: '2024-11-15', dueDate: '2024-11-29', returnDate: null, status: 'Aktif' },
-    { id: 3004, memberId: 1005, memberName: 'Ali Haydar', memberCard: 'LIB-2210', bookId: 2006, bookTitle: 'Kürk Mantolu Madonna', bookAuthor: 'Sabahattin Ali', loanDate: '2024-10-22', dueDate: '2024-11-05', returnDate: null, status: 'Gecikmiş' },
-    { id: 3005, memberId: 1006, memberName: 'Zeynep Arslan', memberCard: 'LIB-7731', bookId: 2004, bookTitle: '1984', bookAuthor: 'George Orwell', loanDate: '2024-11-01', dueDate: '2024-11-15', returnDate: '2024-11-14', status: 'İade Edildi' },
-    { id: 3006, memberId: 1004, memberName: 'Selin Demir', memberCard: 'LIB-5541', bookId: 2002, bookTitle: 'Suç ve Ceza', bookAuthor: 'F. Dostoyevski', loanDate: '2024-11-18', dueDate: '2024-12-02', returnDate: null, status: 'Aktif' },
-  ]);
-
-  Store.save('logs', [
-    { id: 4001, date: '2024-11-25 09:14', user: 'Dr. Selim Yılmaz', action: 'Ödünç Verme', detail: '"Saatleri Ayarlama Enstitüsü" → Ahmet Yılmaz', type: 'loan' },
-    { id: 4002, date: '2024-11-24 14:22', user: 'Dr. Selim Yılmaz', action: 'Kitap İadesi', detail: '"1984" ← Zeynep Arslan', type: 'return' },
-    { id: 4003, date: '2024-11-24 11:05', user: 'Dr. Selim Yılmaz', action: 'Yeni Üye', detail: 'Selin Demir sisteme kaydedildi (LIB-5541)', type: 'member' },
-    { id: 4004, date: '2024-11-23 16:30', user: 'Dr. Selim Yılmaz', action: 'Gecikme Uyarısı', detail: 'Sefiller — Elif Kaya (22 gün gecikmiş)', type: 'warning' },
-    { id: 4005, date: '2024-11-22 10:15', user: 'Dr. Selim Yılmaz', action: 'Kitap Eklendi', detail: '"Yapay Zeka: Modern Yaklaşım" kataloğa eklendi', type: 'book' },
-  ]);
-
-  Store.set('seeded', true);
+  
 }
 
 // ═══════════════════════════════════════════════════════
@@ -160,21 +119,29 @@ function statusBadge(status) {
   return `<span class="px-2.5 py-1 rounded-full text-xs font-semibold ring-1 ring-inset ${cls}">${status}</span>`;
 }
 
-function confirm(msg, cb) {
-  const overlay = document.createElement('div');
-  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(4px);z-index:9999;display:flex;align-items:center;justify-content:center;';
-  overlay.innerHTML = `
-    <div style="background:#fff;border-radius:16px;padding:32px;max-width:400px;width:90%;box-shadow:0 24px 64px rgba(0,0,0,.2);font-family:Inter,sans-serif;">
-      <div style="font-size:16px;font-weight:600;color:#0f172a;margin-bottom:8px;">Onay Gerekiyor</div>
-      <div style="font-size:14px;color:#64748b;margin-bottom:24px;">${msg}</div>
-      <div style="display:flex;gap:12px;justify-content:flex-end;">
-        <button id="kz-cancel" style="padding:10px 20px;border-radius:10px;border:1px solid #e2e8f0;background:#f8fafc;font-size:14px;font-weight:600;cursor:pointer;color:#64748b;">İptal</button>
-        <button id="kz-confirm" style="padding:10px 20px;border-radius:10px;border:none;background:#ef4444;color:#fff;font-size:14px;font-weight:600;cursor:pointer;">Sil</button>
-      </div>
-    </div>`;
-  document.body.appendChild(overlay);
-  overlay.querySelector('#kz-cancel').onclick = () => overlay.remove();
-  overlay.querySelector('#kz-confirm').onclick = () => { overlay.remove(); cb(); };
+
+function kzConfirm(msg, cb) {
+    const overlay = document.createElement('div');
+    overlay.id = 'kz-overlay'; // ID ekledik ki kolay bulalım
+    overlay.style = 'position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(4px);z-index:9999;display:flex;align-items:center;justify-content:center;';
+    overlay.innerHTML = `
+        <div style="background:#fff;border-radius:16px;padding:32px;max-width:400px;width:90%;box-shadow:0 24px 64px rgba(0,0,0,.2);font-family:Inter,sans-serif;">
+            <div style="font-size:16px;font-weight:600;color:#0f172a;margin-bottom:8px;">Onay Gerekiyor</div>
+            <div style="font-size:14px;color:#64748b;margin-bottom:24px;">${msg}</div>
+            <div style="display:flex;gap:12px;justify-content:flex-end;">
+                <button id="kz-cancel" style="padding:10px 20px;border-radius:10px;border:1px solid #e2e8f0;background:#f8fafc;font-size:14px;font-weight:600;color:#64748b;cursor:pointer;">İptal</button>
+                <button id="kz-confirm" style="padding:10px 20px;border-radius:10px;border:none;background:#ef4444;color:#fff;font-size:14px;font-weight:600;cursor:pointer;">Sil</button>
+            </div>
+        </div>`;
+
+    document.body.appendChild(overlay);
+
+    overlay.querySelector('#kz-cancel').onclick = () => overlay.remove();
+
+    overlay.querySelector('#kz-confirm').onclick = () => {
+        overlay.remove();
+        if (cb) cb(); // Callback fonksiyonunu güvenli çağırıyoruz
+    };
 }
 
 // Modal aç/kapat
@@ -443,7 +410,7 @@ function openMemberModal(memberId) {
     document.getElementById('member-phone').value = m.phone || '';
     document.getElementById('member-email').value = m.email || '';
     document.getElementById('member-address').value = m.address || '';
-    document.getElementById('member-occupation').value = m.occupation || '';
+  
     document.getElementById('member-joindate').value = m.joinDate || '';
     document.getElementById('member-cardno').value = m.cardNo || '';
     document.getElementById('member-status').value = m.status || 'Aktif';
@@ -460,7 +427,7 @@ function saveMember() {
   const phone = document.getElementById('member-phone').value.trim();
   const email = document.getElementById('member-email').value.trim();
   const address = document.getElementById('member-address').value.trim();
-  const occupation = document.getElementById('member-occupation').value.trim();
+  
   const joinDate = document.getElementById('member-joindate').value;
   const cardNo = document.getElementById('member-cardno').value;
   const status = document.getElementById('member-status').value;
@@ -469,11 +436,11 @@ function saveMember() {
   if (tc && tc.length !== 11) { toast('TC Kimlik No 11 haneli olmalıdır.', 'warning'); return; }
 
   if (memberState.editingId) {
-    Store.update('members', memberState.editingId, { fullName, tc, phone, email, address, occupation, joinDate, status });
+    Store.update('members', memberState.editingId, { fullName, tc, phone, email, address,  joinDate, status });
     addLog('Üye Güncellendi', `${fullName} bilgileri güncellendi`, 'member');
     toast(`${fullName} güncellendi.`, 'success');
   } else {
-    const newMember = { cardNo, fullName, tc, phone, email, address, occupation, joinDate, status, booksRead: 0, activeLoans: 0 };
+    const newMember = { cardNo, fullName, tc, phone, email, address,  joinDate, status, booksRead: 0, activeLoans: 0 };
     Store.insert('members', newMember);
     addLog('Yeni Üye', `${fullName} sisteme kaydedildi (${cardNo})`, 'member');
     toast(`${fullName} başarıyla eklendi!`, 'success');

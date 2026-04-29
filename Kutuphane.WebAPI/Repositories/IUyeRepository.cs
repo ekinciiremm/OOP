@@ -13,5 +13,6 @@ namespace Kutuphane.WebAPI.Repositories
         UyeIslemleriDTO UyeGetirById(int id);
 
         List<OduncGecmisiDTO> UyeOduncGecmisiGetir(int uyeId);
+        void UyeDurumGuncelle(int id, string durum);
     }
 }
